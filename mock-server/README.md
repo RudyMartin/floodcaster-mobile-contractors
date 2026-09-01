@@ -14,4 +14,6 @@ For `GET /mobile/v1/determinations/DET-TEST-001`, send `X-Floodcaster-Mock-Deter
 
 Authentication simulation: `POST /mobile/v1/session` returns a `Bearer` token with an explicit `expires_at` (TTL via `FLOODCASTER_MOCK_SESSION_TTL_SECONDS`, default 300). `POST /mobile/v1/operations` requires the token and returns `401 AUTH_REQUIRED`/`AUTH_EXPIRED` otherwise. Send `X-Floodcaster-Mock-Session-State: expired` to force expiry deterministically — queued client work must survive the 401 unchanged.
 
+Corpus endpoints: `GET /mobile/v1/properties?query=` searches the 90-property test corpus; `GET /mobile/v1/properties/{id}` returns any corpus read model; `GET /mobile/v1/layers` lists the flood presentation layers with pinned sha256 digests; `GET /mobile/v1/layers/{flood-normal|flood-complex|flood-stress-3x}` streams the GeoJSON.
+
 This is a fixture server, not a Floodcaster backend implementation.
