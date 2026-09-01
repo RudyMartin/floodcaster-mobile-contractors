@@ -22,6 +22,22 @@ Keep form answers short. Detailed evidence goes in [ASSESSMENT-RESPONSE-TEMPLATE
 | 9 | Risk register | An honest list of problems and unknowns. What can this platform not do? What did you assume but not prove? What could break in production? Short bullet points are fine. |
 | 10 | Next-stage price | Your own price and time estimate for building the real production app, as a separate quote. This is NOT part of the $200 — it is your offer for the next contract. |
 
+## Submission checklist — do these in order
+
+On your final day (Friday Sept 18, or earlier if you finish early):
+
+1. [ ] Run `node scripts/dry-run.mjs` one last time. All 16 checks pass.
+2. [ ] Run your own automated tests with one command. They pass.
+3. [ ] Do the full acceptance script (parts A–F). Save every screenshot and recording it asks for.
+4. [ ] Fill in every section of [ASSESSMENT-RESPONSE-TEMPLATE.md](ASSESSMENT-RESPONSE-TEMPLATE.md). Write your limitations honestly — a named limitation is normal; a hidden one is disqualifying.
+5. [ ] Check the deliverable table above: all ten exist, and each has a real file path in your workspace (or ZIP).
+6. [ ] Push your final commit to your workspace repository, or build the ZIP with the same folder layout.
+7. [ ] Copy the final commit SHA (or the ZIP filename).
+8. [ ] Fill in the form below and paste it into the Fiverr delivery message.
+9. [ ] Press deliver on Fiverr before the end of the day, your local time.
+
+**After you deliver:** we confirm we received it within 24 hours. If something is missing, or we cannot build and run your app from your own instructions, we tell you exactly what — before evaluation starts, not after. Results are announced Friday Sept 25.
+
 ## The form
 
 ```
