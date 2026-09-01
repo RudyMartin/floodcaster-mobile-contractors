@@ -25,6 +25,13 @@ Complete every section. Link claims to code, tests, recordings, or measured outp
 | Background/foreground map recovery | | | |
 | Baseline and 3× map load | | | |
 
+## 2a. Automated tests (deliverable 4)
+
+- Exact command to run the tests:
+- What they cover — one line each for: (a) a saved observation survives the app being killed; (b) the operation ID never changes across retries; (c) determinations and observations are displayed clearly differently:
+- Paste the final line of the test output (pass/fail counts):
+- Screen recording file/link (deliverable 5), and at which minutes the app-kill tests appear:
+
 ## 3. Measurements
 
 Report device, OS, build mode, data size, method, median, worst observed value, and failure point for cold start, map interaction, cache/pin, offline reopen, and reconnect processing.
