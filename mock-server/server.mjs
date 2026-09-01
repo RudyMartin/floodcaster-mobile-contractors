@@ -106,6 +106,7 @@ createServer(async (request, response) => {
         aoi_bbox_wgs84: corpusManifest.aoi_bbox_wgs84,
         layers: Object.keys(layerFiles).map((name) => ({
           layer_name: name,
+          layer_class: 'HAZARD',
           ...corpusManifest.assets[name.replace(/-/g, '_')]
         }))
       });
