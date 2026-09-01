@@ -279,9 +279,17 @@ components:
           type: array
           items:
             type: object
-            required: [layer_name, feature_count, size_bytes, sha256]
+            required: [layer_name, layer_class, feature_count, size_bytes, sha256]
             properties:
               layer_name: { type: string }
+              layer_class:
+                type: string
+                description: >-
+                  Semantic class of the layer, not a style hint. The POC corpus
+                  serves only HAZARD layers; the full enum is reserved so future
+                  layer types extend the index without a contract break. Clients
+                  must render unknown classes generically rather than failing.
+                enum: [OBSERVATION, HAZARD, EXPOSURE, CAPACITY, ROUTE, DETERMINATION, DECISION_SUPPORT, TASK]
               file: { type: string }
               format: { type: string }
               crs: { type: string }

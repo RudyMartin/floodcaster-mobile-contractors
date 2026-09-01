@@ -75,6 +75,7 @@ try {
     const { body } = await json('/mobile/v1/layers');
     expect(body.layers.length === 3, 'expected 3 layers');
     for (const layer of body.layers) {
+      expect(layer.layer_class === 'HAZARD', `${layer.layer_name} missing layer_class`);
       const bytes = Buffer.from(await (await fetch(`${base}/mobile/v1/layers/${layer.layer_name}`)).arrayBuffer());
       expect(bytes.length === layer.size_bytes, `${layer.layer_name} size mismatch`);
       const digest = createHash('sha256').update(bytes).digest('hex');
