@@ -25,6 +25,13 @@ Complete every section. Link claims to code, tests, recordings, or measured outp
 | Background/foreground map recovery | | | |
 | Baseline and 3× map load | | | |
 
+## 2a. Automated tests (deliverable 4)
+
+- Exact command to run the tests:
+- What they cover — one line each for: queue durability, stable operation IDs, artifact-state rendering:
+- Paste the final line of the test output (counts of pass/fail):
+- Screen recording file/link (deliverable 5) and which scenario minutes cover the process-kill tests:
+
 ## 3. Measurements
 
 Report device, OS, build mode, data size, method, median, worst observed value, and failure point for cold start, map interaction, cache/pin, offline reopen, and reconnect processing.
