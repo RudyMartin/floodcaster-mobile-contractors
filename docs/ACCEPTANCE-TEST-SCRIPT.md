@@ -65,8 +65,15 @@ Conventions:
 | F2 | Load the supplied baseline test layer. Measure interaction. | Device, OS, renderer, feature count, frame-rate or latency method and numbers, memory behavior. "Smooth" without measurement is not evidence. |
 | F3 | Repeat F2 at the supplied 3× stress layer. | Same measurements; state the failure point if one occurs. |
 
+## Test environment
+
+No device coverage is required for this milestone. Run the script on whatever you have — a single physical phone, an emulator/simulator, or a Floodcaster-sponsored remote real-device session (see the FAQ) are all acceptable. Broader device validation is Floodcaster's responsibility in a later stage, on Floodcaster's hardware.
+
+What matters is full disclosure, not the hardware: report exactly what you used — device model or emulator image, OS version, total RAM, and WebView/browser-engine version where applicable. Undisclosed substitution, not modest hardware, is what invalidates a result.
+
+Any step your environment cannot express (for example, true airplane mode or OS force-stop on a remote session) is reported as a named environment limitation, not a failure — and never silently skipped or substituted.
+
 ## Reporting
 
 - One row per step in the response template: pass/fail, evidence link, deviations.
-- Any step that cannot be executed on a given OS must be reported as a named platform limitation, not silently skipped or substituted.
-- Run the full script on at least one iOS and one Android device from `docs/DEVICE-TEST-MATRIX.md`.
+- State the test environment (per above) once, at the top of the report.

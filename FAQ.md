@@ -83,3 +83,11 @@ Not at the public POC stage. The path is: contract/mock POC, private integration
 ## 21. Who owns backend changes?
 
 Floodcaster. Contractors record needed contract changes as gaps; they do not alter flood analytics, certificate semantics, canonical schemas, authorization, or production infrastructure.
+
+## 22. What devices do we need?
+
+None in particular. A single physical phone, an emulator/simulator, or a sponsored remote session all qualify; just report exactly what you used (model or image, OS version, RAM, WebView/browser-engine version). Multi-device validation is Floodcaster's job at a later stage, on Floodcaster's hardware — it is not part of this milestone and not priced into it.
+
+## 23. What if we have no suitable device at all?
+
+Ask. Floodcaster will provide a sponsored remote real-device session (a commercial device cloud) at its own cost. Steps the remote environment cannot express are reported as environment limitations per the acceptance script, not counted as failures.
