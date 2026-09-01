@@ -9,6 +9,7 @@ Conventions:
 - "Offline" means OS-level airplane mode or equivalent network kill, not a mocked flag inside the app.
 - Timestamps in evidence use the device clock; state the timezone once.
 - Screen recordings must show the device status bar (connectivity state visible).
+- Before starting, run `node scripts/dry-run.mjs` — it boots the mock and proves every contract scenario this script depends on. A failing dry run means the environment, not your client, is broken.
 
 ## Part A — Online retrieval and recognition
 
