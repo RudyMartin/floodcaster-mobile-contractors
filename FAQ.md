@@ -107,3 +107,9 @@ If your approach wins: your code becomes the starting point for the real mobile 
 If your approach does not win: you are still paid the $200 if your submission is complete. The winner is the approach, not the person — a complete losing submission is still fully paid work. We keep all submitted code (this is in the terms). You may also be our backup choice for the next stage.
 
 Important: the app does not go live in September. The POC answers one question — which approach is best? Real users come later, in later stages.
+
+## 26. Do you provide tests? What tests must I write?
+
+We provide one test tool: `node scripts/dry-run.mjs`. It tests OUR mock server and contract — not your app. It cannot fail you; it only proves the kit works on your machine.
+
+The automated tests for your own app (deliverable 4) are yours to write. Unit tests, integration tests, or a mix — your choice; we do not require a specific kind or framework. The requirement is simple: one command runs them, and together they prove three things: (a) a saved observation is still there after the app is killed; (b) the operation ID never changes, even after retries; (c) determinations and observations are displayed clearly differently. A small number of honest tests covering those three behaviors is enough — large decorative test suites earn nothing extra.
