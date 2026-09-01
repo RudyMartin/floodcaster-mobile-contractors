@@ -1,13 +1,34 @@
 import { createServer } from 'node:http';
-import { readFile } from 'node:fs/promises';
+import { createReadStream } from 'node:fs';
+import { readFile, stat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const fixtureDir = join(here, '..', 'fixtures');
+const corpusDir = join(fixtureDir, 'corpus');
 const port = Number(process.env.FLOODCASTER_MOCK_PORT || 8787);
 
 const fixture = async (name) => JSON.parse(await readFile(join(fixtureDir, name), 'utf8'));
+
+const corpus = new Map();
+for (const feature of JSON.parse(await readFile(join(corpusDir, 'properties.geojson'), 'utf8')).features) {
+  corpus.set(feature.properties.property_id, feature);
+}
+const corpusManifest = JSON.parse(await readFile(join(corpusDir, 'corpus-manifest.json'), 'utf8'));
+const layerFiles = {
+  'flood-normal': 'flood-normal.geojson',
+  'flood-complex': 'flood-complex.geojson',
+  'flood-stress-3x': 'flood-stress-3x.geojson'
+};
+
+const readModel = (feature) => ({
+  environment: 'TEST_ONLY',
+  property_id: feature.properties.property_id,
+  display_address: feature.properties.display_address,
+  geometry: feature.geometry,
+  determination_ids: feature.properties.determination_ids
+});
 
 const send = (response, status, body) => {
   response.writeHead(status, {
@@ -42,7 +63,6 @@ const readJson = async (request) => {
 
 const routes = new Map([
   ['GET /mobile/v1/bootstrap', 'bootstrap.json'],
-  ['GET /mobile/v1/properties/PROP-TEST-001', 'property.json'],
   ['GET /mobile/v1/certificates/CERT-TEST-001', 'certificate.json']
 ]);
 
@@ -58,8 +78,50 @@ createServer(async (request, response) => {
   if (request.method === 'OPTIONS') return send(response, 204, {});
 
   try {
-    const key = `${request.method} ${new URL(request.url, 'http://localhost').pathname}`;
+    const url = new URL(request.url, 'http://localhost');
+    const key = `${request.method} ${url.pathname}`;
     if (routes.has(key)) return send(response, 200, await fixture(routes.get(key)));
+
+    if (key === 'GET /mobile/v1/properties') {
+      const query = (url.searchParams.get('query') || '').toLowerCase();
+      const matches = [...corpus.values()]
+        .filter((f) => !query
+          || f.properties.property_id.toLowerCase().includes(query)
+          || f.properties.display_address.toLowerCase().includes(query))
+        .slice(0, 20)
+        .map((f) => ({ property_id: f.properties.property_id, display_address: f.properties.display_address }));
+      return send(response, 200, { environment: 'TEST_ONLY', count: matches.length, results: matches });
+    }
+
+    const propertyMatch = url.pathname.match(/^\/mobile\/v1\/properties\/([A-Z0-9-]+)$/);
+    if (request.method === 'GET' && propertyMatch) {
+      const feature = corpus.get(propertyMatch[1]);
+      if (!feature) return send(response, 404, { environment: 'TEST_ONLY', error: 'NOT_FOUND' });
+      return send(response, 200, readModel(feature));
+    }
+
+    if (key === 'GET /mobile/v1/layers') {
+      return send(response, 200, {
+        environment: 'TEST_ONLY',
+        aoi_bbox_wgs84: corpusManifest.aoi_bbox_wgs84,
+        layers: Object.keys(layerFiles).map((name) => ({
+          layer_name: name,
+          ...corpusManifest.assets[name.replace(/-/g, '_')]
+        }))
+      });
+    }
+
+    const layerMatch = url.pathname.match(/^\/mobile\/v1\/layers\/([a-z0-9-]+)$/);
+    if (request.method === 'GET' && layerMatch && layerFiles[layerMatch[1]]) {
+      const path = join(corpusDir, layerFiles[layerMatch[1]]);
+      const { size } = await stat(path);
+      response.writeHead(200, {
+        'content-type': 'application/geo+json',
+        'content-length': size,
+        'access-control-allow-origin': '*'
+      });
+      return createReadStream(path).pipe(response);
+    }
 
     if (key === 'GET /mobile/v1/determinations/DET-TEST-001') {
       const state = request.headers['x-floodcaster-mock-determination-state'];

@@ -39,6 +39,57 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Bootstrap'
+  /mobile/v1/properties:
+    get:
+      tags: [Read models]
+      summary: Search the test corpus properties
+      parameters:
+        - name: query
+          in: query
+          required: false
+          schema: { type: string }
+          description: Case-insensitive substring over property_id and display_address
+      responses:
+        '200':
+          description: Up to 20 matches
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertySearchResult'
+  /mobile/v1/layers:
+    get:
+      tags: [Read models]
+      summary: List the corpus flood presentation layers with pinned digests
+      responses:
+        '200':
+          description: Layer index (feature counts, sizes, sha256) from the corpus manifest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LayerIndex'
+  /mobile/v1/layers/{layer_name}:
+    get:
+      tags: [Read models]
+      summary: Stream one corpus flood layer as GeoJSON
+      description: >-
+        Presentation/test data only; layer content is never authorization or an
+        authoritative area-of-interest boundary. Bytes match the sha256 pinned
+        in the layer index. flood-stress-3x is the performance probe input.
+      parameters:
+        - name: layer_name
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [flood-normal, flood-complex, flood-stress-3x]
+      responses:
+        '200':
+          description: GeoJSON FeatureCollection (WGS 84)
+          content:
+            application/geo+json:
+              schema: { type: object }
+        '404':
+          $ref: '#/components/responses/NotFound'
   /mobile/v1/properties/{property_id}:
     get:
       tags: [Read models]
@@ -184,6 +235,45 @@ components:
           const: SUBMIT_FIELD_OBSERVATION
         observation:
           $ref: './schemas/field-observation.schema.json'
+    PropertySearchResult:
+      type: object
+      additionalProperties: false
+      required: [environment, count, results]
+      properties:
+        environment: { const: TEST_ONLY }
+        count: { type: integer }
+        results:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required: [property_id, display_address]
+            properties:
+              property_id: { type: string }
+              display_address: { type: string }
+    LayerIndex:
+      type: object
+      additionalProperties: false
+      required: [environment, aoi_bbox_wgs84, layers]
+      properties:
+        environment: { const: TEST_ONLY }
+        aoi_bbox_wgs84:
+          type: array
+          items: { type: number }
+        layers:
+          type: array
+          items:
+            type: object
+            required: [layer_name, feature_count, size_bytes, sha256]
+            properties:
+              layer_name: { type: string }
+              file: { type: string }
+              format: { type: string }
+              crs: { type: string }
+              feature_count: { type: integer }
+              vertex_stats: { type: object }
+              size_bytes: { type: integer }
+              sha256: { type: string }
     Session:
       type: object
       additionalProperties: false

@@ -1,10 +1,35 @@
 {
   "environment": "TEST_ONLY",
   "property_id": "PROP-TEST-001",
-  "display_address": "100 Test Lane, Example City",
+  "display_address": "101 Test Lane, La Crosse WI (TEST_ONLY)",
   "geometry": {
     "type": "Polygon",
-    "coordinates": [[[-86.7851, 36.1624], [-86.7849, 36.1624], [-86.7849, 36.1626], [-86.7851, 36.1626], [-86.7851, 36.1624]]]
+    "coordinates": [
+      [
+        [
+          -91.235775,
+          43.857266
+        ],
+        [
+          -91.235774,
+          43.857156
+        ],
+        [
+          -91.236305,
+          43.857151
+        ],
+        [
+          -91.236306,
+          43.857261
+        ],
+        [
+          -91.235775,
+          43.857266
+        ]
+      ]
+    ]
   },
-  "determination_ids": ["DET-TEST-001"]
+  "determination_ids": [
+    "DET-TEST-001"
+  ]
 }

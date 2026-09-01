@@ -1,0 +1,91 @@
+{
+  "environment": "TEST_ONLY",
+  "schema": "floodcaster.gate0-corpus.v1",
+  "generated": "2026-09-01",
+  "generator": "NextShiftConsulting/mvp1-mobile scripts/build_gate0_corpus.py",
+  "aoi_bbox_wgs84": [
+    -91.238318,
+    43.855775,
+    -91.234208,
+    43.858674
+  ],
+  "assets": {
+    "properties": {
+      "file": "properties.geojson",
+      "format": "GeoJSON",
+      "crs": "EPSG:4326",
+      "feature_count": 90,
+      "vertex_stats": {
+        "min": 5,
+        "median": 5,
+        "max": 7,
+        "total": 486
+      },
+      "size_bytes": 32917,
+      "sha256": "bb76519e7646219a3cbecfb8273786dd871ac9554ebb1b86a97afaf17bd0f3ae"
+    },
+    "flood_normal": {
+      "file": "flood-normal.geojson",
+      "format": "GeoJSON",
+      "crs": "EPSG:4326",
+      "feature_count": 72,
+      "vertex_stats": {
+        "min": 13,
+        "median": 161,
+        "max": 20258,
+        "total": 52644
+      },
+      "size_bytes": 1424651,
+      "sha256": "b448b8ed71ba5fa20bed5509311cae71e7e692619d4b8aab44042954fc8d4115"
+    },
+    "flood_complex": {
+      "file": "flood-complex.geojson",
+      "format": "GeoJSON",
+      "crs": "EPSG:4326",
+      "feature_count": 268,
+      "vertex_stats": {
+        "min": 5,
+        "median": 252,
+        "max": 73644,
+        "total": 340573
+      },
+      "size_bytes": 9173266,
+      "sha256": "fefd32daa53bc8a847663a4cc67f9f1bef56cc4f9b638278aa19f69f2cd9e8bd"
+    },
+    "flood_stress_3x": {
+      "file": "flood-stress-3x.geojson",
+      "format": "GeoJSON",
+      "crs": "EPSG:4326",
+      "feature_count": 804,
+      "vertex_stats": {
+        "min": 5,
+        "median": 252,
+        "max": 73644,
+        "total": 1021719
+      },
+      "size_bytes": 27555547,
+      "sha256": "f8f8e552d7c6be0736808de231e0d8a238f620f83bb29c8814597c32a47e956b"
+    }
+  },
+  "provenance": {
+    "parcels": {
+      "source_key": "s3://swarm-floodrsct-data/processed/wi/pipeline_inputs/v1/parcels_lacrosse.gpkg",
+      "upstream": "Wisconsin Statewide Parcel Map Initiative V12 (open data)",
+      "license": "Wisconsin open data; no owner attributes present or republished"
+    },
+    "flood_zones": {
+      "source_key": "s3://swarm-floodrsct-data/processed/wi/pipeline_inputs/v2/zones_lacrosse.gpkg",
+      "upstream": "FEMA NFHL state 55 release NFHL_55_20260609 (public domain)",
+      "license": "US public domain (FEMA)"
+    }
+  },
+  "sanitization": [
+    "property ids and display addresses are synthetic",
+    "no parcel attributes republished (geometry only)",
+    "stress layer is a derived synthetic 3x replication (offset copies)"
+  ],
+  "rules": [
+    "presentation/test data only; corpus membership is never authorization",
+    "performance findings cite these digests"
+  ]
+}

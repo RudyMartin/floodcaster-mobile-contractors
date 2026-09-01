@@ -1,8 +1,10 @@
 # Representative Test Corpus Specification
 
-Floodcaster — not the contractor — defines what "representative" means. This document freezes that definition. The corpus binaries are supplied by Floodcaster before the paid milestone clock starts; until then, the counts and shapes below are the authoritative sizing basis for any performance claim.
+Floodcaster — not the contractor — defines what "representative" means. This document freezes that definition.
 
-All corpus content is `TEST_ONLY`: fictitious or public-source-derived, never customer or production data.
+**Status: DELIVERED.** The corpus lives in `fixtures/corpus/` (La Crosse, Wisconsin test area) and is served by the mock at `/mobile/v1/properties` (search), `/mobile/v1/properties/{id}`, and `/mobile/v1/layers/{layer_name}`. `fixtures/corpus/corpus-manifest.json` pins per-asset feature counts, vertex statistics, sizes, CRS, sha256 digests, provenance, and licenses — performance findings cite those digests.
+
+All corpus content is `TEST_ONLY`: public-source-derived (Wisconsin open parcel data, FEMA NFHL — public domain), never customer or production data. Property IDs and display addresses are synthetic; no parcel attributes beyond geometry are republished.
 
 ## Contents
 
@@ -32,7 +34,6 @@ Delivered assets respect hard size caps so no plausible device is excluded: offl
 
 ## Rules
 
-1. Contractors do not substitute their own datasets for performance claims; F2/F3 measurements are valid only against this corpus.
+1. Contractors do not substitute their own datasets for performance claims; F2/F3 measurements are valid only against this corpus (`flood-normal` is the F2 baseline; `flood-stress-3x` is the F3 probe).
 2. Corpus membership is presentation data — it never implies authorization or an authoritative area-of-interest boundary.
 3. If a delivered asset deviates from this spec, the deviation is documented in the manifest; contractors report against what was actually delivered.
-4. Until the corpus is delivered, the synthetic fixtures in `fixtures/` remain the only valid inputs, and performance findings are labeled `SYNTHETIC BASELINE`.
