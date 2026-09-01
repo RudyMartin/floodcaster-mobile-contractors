@@ -23,9 +23,8 @@ The React/Leaflet application at the repository root is a sanitized reference sn
 9. [docs/ACCEPTANCE-TEST-SCRIPT.md](docs/ACCEPTANCE-TEST-SCRIPT.md) — the deterministic numbered script every contractor runs
 10. [docs/VISUAL-STATE-SHEET.md](docs/VISUAL-STATE-SHEET.md) — required fields and states for the four reference screens ([wireframes](docs/ui-states/))
 11. [docs/TEST-CORPUS-SPEC.md](docs/TEST-CORPUS-SPEC.md) — what "representative" data means; corpus supplied by Floodcaster
-12. [docs/DEVICE-TEST-MATRIX.md](docs/DEVICE-TEST-MATRIX.md) — frozen device set for comparable results
-13. [ASSESSMENT-RESPONSE-TEMPLATE.md](ASSESSMENT-RESPONSE-TEMPLATE.md) — required response format
-14. [FAQ.md](FAQ.md) and [KNOWN-GAPS.md](KNOWN-GAPS.md)
+12. [ASSESSMENT-RESPONSE-TEMPLATE.md](ASSESSMENT-RESPONSE-TEMPLATE.md) — required response format
+13. [FAQ.md](FAQ.md) and [KNOWN-GAPS.md](KNOWN-GAPS.md)
 
 The existing [infosec review pack](docs/infosec/INFOSEC-FLOW-INDEX.md) remains part of the briefing and is intentionally unchanged by this architecture revision.
 

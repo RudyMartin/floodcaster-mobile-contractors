@@ -26,6 +26,10 @@ All corpus content is `TEST_ONLY`: fictitious or public-source-derived, never cu
 
 Each delivered corpus includes a manifest recording, per asset: feature count, vertex statistics (min/median/max per feature), file size, format, CRS, digest, and provenance (source and license for any public-source-derived content).
 
+## Size budgets
+
+Delivered assets respect hard size caps so no plausible device is excluded: offline map pack ≤ 50 MB installed; total corpus download ≤ 100 MB. If an asset cannot meet its cap, Floodcaster shrinks the test area — contractors are never asked to accommodate an oversized asset.
+
 ## Rules
 
 1. Contractors do not substitute their own datasets for performance claims; F2/F3 measurements are valid only against this corpus.
