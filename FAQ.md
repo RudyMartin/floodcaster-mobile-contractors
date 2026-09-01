@@ -113,3 +113,7 @@ Important: the app does not go live in September. The POC answers one question �
 We provide one test tool: `node scripts/dry-run.mjs`. It tests OUR mock server and contract — not your app. It cannot fail you; it only proves the kit works on your machine.
 
 The automated tests for your own app (deliverable 4) are yours to write. Unit tests, integration tests, or a mix — your choice; we do not require a specific kind or framework. The requirement is simple: one command runs them, and together they prove three things: (a) a saved observation is still there after the app is killed; (b) the operation ID never changes, even after retries; (c) determinations and observations are displayed clearly differently. A small number of honest tests covering those three behaviors is enough — large decorative test suites earn nothing extra.
+
+## 27. Should I use the Floodcaster logo?
+
+No. Do not copy the logo from our website, and do not draw your own version. Use plain text (for example "Floodcaster Field POC") and the favicon supplied in this kit. The POC is judged on behavior and evidence, not visual branding. Official brand assets come later, in the next stage, as files we supply with usage rules — the same principle as certified data: the client never manufactures what the platform owns.
