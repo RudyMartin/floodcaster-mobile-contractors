@@ -97,3 +97,13 @@ Ask. Floodcaster will provide a sponsored remote real-device session (a commerci
 ## 24. How do I ask questions, and what are the deadline and submission process?
 
 Questions: ask in your Fiverr order conversation (the complete record stays with the engagement); kit bugs may also be filed as GitHub issues, and answers useful to every bidder are published in this FAQ. Schedule: day-2 orientation check-in on Fiverr (dry-run output + restate the assignment in your own words + first questions; we reply within 24 hours); three-line status every Tuesday and Friday; progress checkpoint Friday September 11 (workspace shows dry-run passing and offline capture working); final submission Friday September 18, end of day, your local time; results announced Friday September 25. The frequent small check-ins exist to catch misunderstandings in the first days, when they are cheap to fix — they are help, not surveillance. On hire you receive a private workspace repository pre-loaded with this kit; push your work there (visible to you and Floodcaster only, never to other contractors). If you cannot use GitHub, a ZIP of all files attached to the Fiverr delivery is accepted instead. Final delivery: workspace repo (or ZIP) with the completed assessment response template, plus SUBMISSION-FORM.md pasted into the Fiverr delivery message. Payment runs through Fiverr. Do not push work into this public repository.
+
+## 25. What happens after I submit? Does my POC become the real app?
+
+The simple timeline: Friday Sept 18, all three contractors submit their work. From Sept 18 to 25 we test and compare the three submissions — nothing is built that week, we only evaluate, and because all three used the same test script and the same data, the comparison is fair. Friday Sept 25 we announce which approach won.
+
+If your approach wins: your code becomes the starting point for the real mobile app. That is a new, separately paid project — not part of the $200. The next steps are: (1) connect your same app to our real test API — a small change, because your app already speaks the correct API language; (2) we test on many devices; (3) a small pilot with real users; (4) production release. Your deliverable #10 — your own price estimate for the next stage — is where that new contract starts.
+
+If your approach does not win: you are still paid the $200 if your submission is complete. The winner is the approach, not the person — a complete losing submission is still fully paid work. We keep all submitted code (this is in the terms). You may also be our backup choice for the next stage.
+
+Important: the app does not go live in September. The POC answers one question — which approach is best? Real users come later, in later stages.
