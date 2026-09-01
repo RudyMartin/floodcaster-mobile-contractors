@@ -1,6 +1,6 @@
 # Local Contract Mock
 
-Run from the repository root:
+Requires Node.js 18 or newer (uses ES modules and built-in `fetch`). Run from the repository root:
 
 ```bash
 node mock-server/server.mjs

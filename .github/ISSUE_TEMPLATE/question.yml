@@ -1,0 +1,29 @@
+name: Question
+description: Ask anything about the POC — scope, contract, mock, fixtures, acceptance. Answers are public so every bidder benefits.
+labels: [question]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Short questions are fine. Imperfect English is fine. Asking never counts against your bid.
+  - type: input
+    id: doc
+    attributes:
+      label: Which document or endpoint is this about?
+      placeholder: e.g. docs/ACCEPTANCE-TEST-SCRIPT.md step C6, or POST /mobile/v1/operations
+    validations:
+      required: false
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+      placeholder: What do you want to know?
+    validations:
+      required: true
+  - type: textarea
+    id: tried
+    attributes:
+      label: What you already tried or read (optional)
+      placeholder: e.g. I ran the dry-run and read FAQ 12, but...
+    validations:
+      required: false

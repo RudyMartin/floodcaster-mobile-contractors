@@ -2,7 +2,7 @@
 
 ## Rule
 
-Mobile and web clients use a conventional versioned HTTPS/JSON API. Agents may use MCP in parallel. Both interfaces converge on the same governed Floodcaster domain authority.
+Mobile and web clients use a conventional versioned HTTPS/JSON API. AI agents may separately use MCP (Model Context Protocol — not relevant to the mobile client). Every interface talks to the same Floodcaster services; there is no separate backend for mobile, and only those services decide flood results.
 
 ```mermaid
 flowchart LR
@@ -17,7 +17,7 @@ The mobile client does not directly call Rust, Python, PostGIS, model storage, o
 
 [contracts/floodcaster-mobile.openapi.yaml](contracts/floodcaster-mobile.openapi.yaml) defines the draft test surface:
 
-- `GET /mobile/v1/bootstrap`
+- `GET /mobile/v1/bootstrap` (a "read model" below means a read-only JSON view served by the API)
 - `GET /mobile/v1/properties/{property_id}`
 - `GET /mobile/v1/determinations/{determination_id}`
 - `GET /mobile/v1/certificates/{certificate_id}`
@@ -27,7 +27,7 @@ The files in `contracts/` are `POC_CONTRACT_DRAFT`, not ratified production cont
 
 ## Write semantics
 
-The mobile client submits an operation containing a user-attested observation and a stable client-generated operation ID. The server response separates:
+The mobile client submits an operation containing a user-attested observation (attested = the user confirms "I observed this"; the server has not verified it yet) and a stable client-generated operation ID. The server response separates:
 
 - transport acknowledgement;
 - replay detection;
