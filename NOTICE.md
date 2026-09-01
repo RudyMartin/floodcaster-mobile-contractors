@@ -1,5 +1,7 @@
 # Notice
 
+This material is published so you can evaluate the assignment and bid with full information — welcome, and good luck. The legal terms below protect the platform, not trap bidders; working within the assessment as described never violates them.
+
 Copyright 2026 NextShift Consulting. All rights reserved.
 
 This repository is intentionally public for contractor briefing and evaluation. No open-source license is granted. Public visibility does not grant permission to redistribute, commercialize, deploy to production, or reuse the material outside an authorized Floodcaster assessment.

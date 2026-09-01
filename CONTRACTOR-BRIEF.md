@@ -31,8 +31,8 @@ A proposal, wireframe, architecture memo, generated scaffold, or happy-path demo
 - Distinguish observation and determination artifacts by text, iconography, structure, and accessibility semantics; color alone is insufficient.
 - Persist an offline action and its client-generated operation ID before showing a submitted/queued confirmation.
 - Preserve queued work across process termination, device restart where the chosen path supports it, and authentication expiry.
-- Treat GPS as a proposed property match. Require explicit user confirmation and retain horizontal accuracy and CRS.
-- Send observations for server adjudication. Never let the client resolve a domain conflict or issue a determination.
+- Treat GPS as a proposed property match. Require explicit user confirmation and retain horizontal accuracy and CRS (coordinate reference system — WGS 84 / EPSG:4326 throughout this contract).
+- Send observations for server adjudication (the server reviews and decides). Never let the client resolve a conflict or issue a determination itself.
 
 ## Outside contractor authority
 
@@ -49,4 +49,4 @@ Questions that require a production contract decision must be recorded as a cont
 - The client treats itself as authoritative in a conflict.
 - The POC depends on production credentials, production data, or undocumented backend access.
 
-Use [ASSESSMENT-RESPONSE-TEMPLATE.md](ASSESSMENT-RESPONSE-TEMPLATE.md) for the final submission.
+Use [ASSESSMENT-RESPONSE-TEMPLATE.md](ASSESSMENT-RESPONSE-TEMPLATE.md) for the detailed evidence and paste [SUBMISSION-FORM.md](SUBMISSION-FORM.md) into the Fiverr delivery message. Deadline, question channel, and delivery options are in the README quick start.

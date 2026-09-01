@@ -17,7 +17,7 @@ Certified fields must come from the issued artifact:
 
 ## 2. A field observation is user-attested evidence
 
-Do not model it as `authority=NONE`. Use separate authority dimensions:
+Do not collapse authority into one field. Model the separate authority dimensions — the user IS the authority on what they claim to have observed, and has NO authority to issue a determination:
 
 | Field | Required value before server adjudication |
 | --- | --- |
@@ -55,4 +55,4 @@ Offline map data and cached determinations carry freshness/status information. A
 
 ## 7. The API is the client boundary
 
-Mobile and web clients use documented HTTPS APIs. Agents may use MCP alongside those APIs, but both reach the same governed domain services. No client directly invokes Rust, Python, a database, or certificate internals.
+Mobile and web clients use documented HTTPS APIs. AI agents may separately use MCP (Model Context Protocol — irrelevant to the mobile client), but every path reaches the same Floodcaster services; there is no separate backend for mobile. No client directly invokes Rust, Python, a database, or certificate internals.

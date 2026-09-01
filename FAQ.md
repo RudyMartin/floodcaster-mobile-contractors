@@ -62,7 +62,7 @@ No. They show last-known status and verification time. After reconnect, a server
 
 ## 16. Is MCP the mobile interface?
 
-No. Mobile and web use HTTPS/JSON. MCP may serve agents in parallel, with both paths reaching the same governed domain authority.
+No. MCP (Model Context Protocol) is an interface AI agents use to reach Floodcaster; it does not affect the mobile client. Mobile and web use plain HTTPS/JSON. Both paths reach the same Floodcaster services — there is no separate backend for mobile.
 
 ## 17. Are paid plugins allowed?
 
@@ -74,7 +74,7 @@ Runnable code, tests, recording, measurements, dependency/license inventory, reu
 
 ## 19. Is the listed $200 the whole app budget?
 
-No. It is a bounded contractor evaluation milestone only if the agreed deliverable fits that price. Production stages and prices are estimated separately after measured evidence.
+No. $200 is the fixed price for this milestone, and this milestone is exactly the ten deliverables in CONTRACTOR-BRIEF.md — no more, no less. The scope does not grow, and the price does not shrink. It is not the budget for the production application; production stages are scoped and priced separately after the POC, and deliverable 10 is your own estimate for that next stage.
 
 ## 20. When does the app go live?
 
@@ -91,3 +91,7 @@ None in particular. A single physical phone, an emulator/simulator, or a sponsor
 ## 23. What if we have no suitable device at all?
 
 Ask. Floodcaster will provide a sponsored remote real-device session (a commercial device cloud) at its own cost. Steps the remote environment cannot express are reported as environment limitations per the acceptance script, not counted as failures.
+
+## 24. How do I ask questions, and what are the deadline and submission process?
+
+Questions: open a GitHub issue on this repository — answers are public so every bidder sees the same information. Deadline: 14 calendar days from accepting the milestone. Submission and payment run through the Fiverr engagement: preferably a private GitHub repository shared with us, or — if you cannot use GitHub — a ZIP of all files attached to the Fiverr delivery. Include the completed assessment response template and paste SUBMISSION-FORM.md into the delivery message. Do not push work into this public repository.
