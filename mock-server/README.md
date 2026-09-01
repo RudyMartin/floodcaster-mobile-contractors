@@ -12,4 +12,6 @@ For `POST /mobile/v1/operations`, choose a synthetic outcome with `X-Floodcaster
 
 For `GET /mobile/v1/determinations/DET-TEST-001`, send `X-Floodcaster-Mock-Determination-State: superseded` to exercise stale-cache handling.
 
+Authentication simulation: `POST /mobile/v1/session` returns a `Bearer` token with an explicit `expires_at` (TTL via `FLOODCASTER_MOCK_SESSION_TTL_SECONDS`, default 300). `POST /mobile/v1/operations` requires the token and returns `401 AUTH_REQUIRED`/`AUTH_EXPIRED` otherwise. Send `X-Floodcaster-Mock-Session-State: expired` to force expiry deterministically — queued client work must survive the 401 unchanged.
+
 This is a fixture server, not a Floodcaster backend implementation.

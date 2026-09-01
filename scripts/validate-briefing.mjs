@@ -1,8 +1,9 @@
 import { createHash } from 'node:crypto';
 import { readFile, readdir, stat } from 'node:fs/promises';
 import { join, relative } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const root = new URL('..', import.meta.url).pathname;
+const root = fileURLToPath(new URL('..', import.meta.url));
 const manifest = JSON.parse(await readFile(join(root, 'BASELINE-MANIFEST.json'), 'utf8'));
 
 const gitBlobSha = (buffer) => createHash('sha1')

@@ -11,7 +11,23 @@ servers:
 tags:
   - name: Read models
   - name: Operations
+  - name: Session
 paths:
+  /mobile/v1/session:
+    post:
+      tags: [Session]
+      summary: Obtain a TEST_ONLY session token
+      description: >-
+        Simulates authentication for the POC. The mock enforces expiry so
+        clients can prove queued work survives an expired session; the
+        X-Floodcaster-Mock-Session-State header forces expiry deterministically.
+      responses:
+        '201':
+          description: Session token with explicit expiry
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
   /mobile/v1/bootstrap:
     get:
       tags: [Read models]
@@ -79,9 +95,19 @@ paths:
       tags: [Operations]
       summary: Submit one durable client operation for server adjudication
       description: >-
-        X-Floodcaster-Mock-Scenario is accepted only by the TEST_ONLY mock and
-        selects applied, verify-required, rejected, replay, or collision.
+        Requires a valid session token. X-Floodcaster-Mock-Scenario is accepted
+        only by the TEST_ONLY mock and selects applied, verify-required,
+        rejected, replay, or collision. X-Floodcaster-Mock-Session-State:
+        expired forces an expired-session response regardless of token age.
+      security:
+        - sessionToken: []
       parameters:
+        - name: X-Floodcaster-Mock-Session-State
+          in: header
+          required: false
+          schema:
+            type: string
+            enum: [expired]
         - name: X-Floodcaster-Mock-Scenario
           in: header
           required: false
@@ -101,6 +127,21 @@ paths:
             application/json:
               schema:
                 $ref: './schemas/operation-result.schema.json'
+        '401':
+          description: >-
+            Transport-layer authentication failure (AUTH_REQUIRED or
+            AUTH_EXPIRED). Not a domain outcome; queued client work must
+            survive it unchanged.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [environment, error]
+                properties:
+                  environment: { const: TEST_ONLY }
+                  error:
+                    type: string
+                    enum: [AUTH_REQUIRED, AUTH_EXPIRED]
         '409':
           description: Stable operation ID was reused with a different payload
           content:
@@ -108,6 +149,11 @@ paths:
               schema:
                 $ref: './schemas/operation-result.schema.json'
 components:
+  securitySchemes:
+    sessionToken:
+      type: http
+      scheme: bearer
+      description: TEST_ONLY session token from POST /mobile/v1/session
   parameters:
     PropertyId:
       name: property_id
@@ -138,6 +184,14 @@ components:
           const: SUBMIT_FIELD_OBSERVATION
         observation:
           $ref: './schemas/field-observation.schema.json'
+    Session:
+      type: object
+      additionalProperties: false
+      required: [environment, session_token, expires_at]
+      properties:
+        environment: { const: TEST_ONLY }
+        session_token: { type: string }
+        expires_at: { type: string, format: date-time }
     Bootstrap:
       type: object
       additionalProperties: false

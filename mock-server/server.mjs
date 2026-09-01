@@ -13,9 +13,25 @@ const send = (response, status, body) => {
   response.writeHead(status, {
     'content-type': 'application/json; charset=utf-8',
     'access-control-allow-origin': '*',
-    'access-control-allow-headers': 'content-type,x-floodcaster-mock-scenario,x-floodcaster-mock-determination-state'
+    'access-control-allow-headers': 'content-type,authorization,x-floodcaster-mock-scenario,x-floodcaster-mock-determination-state,x-floodcaster-mock-session-state'
   });
   response.end(JSON.stringify(body, null, 2));
+};
+
+const sessionTtlSeconds = Number(process.env.FLOODCASTER_MOCK_SESSION_TTL_SECONDS || 300);
+const sessions = new Map();
+let sessionCounter = 0;
+
+const authenticate = (request) => {
+  if (request.headers['x-floodcaster-mock-session-state'] === 'expired') return { ok: false, error: 'AUTH_EXPIRED' };
+  const header = request.headers.authorization || '';
+  const token = header.startsWith('Bearer ') ? header.slice(7) : null;
+  if (!token || !sessions.has(token)) return { ok: false, error: 'AUTH_REQUIRED' };
+  if (Date.now() > sessions.get(token)) {
+    sessions.delete(token);
+    return { ok: false, error: 'AUTH_EXPIRED' };
+  }
+  return { ok: true };
 };
 
 const readJson = async (request) => {
@@ -50,7 +66,21 @@ createServer(async (request, response) => {
       return send(response, 200, await fixture(state === 'superseded' ? 'superseded-determination.json' : 'issued-determination.json'));
     }
 
+    if (key === 'POST /mobile/v1/session') {
+      sessionCounter += 1;
+      const token = `MOCK-SESSION-${String(sessionCounter).padStart(4, '0')}`;
+      const expiresAt = Date.now() + sessionTtlSeconds * 1000;
+      sessions.set(token, expiresAt);
+      return send(response, 201, {
+        environment: 'TEST_ONLY',
+        session_token: token,
+        expires_at: new Date(expiresAt).toISOString()
+      });
+    }
+
     if (key === 'POST /mobile/v1/operations') {
+      const auth = authenticate(request);
+      if (!auth.ok) return send(response, 401, { environment: 'TEST_ONLY', error: auth.error });
       const body = await readJson(request);
       if (body.operation_type !== 'SUBMIT_FIELD_OBSERVATION' || body.observation?.artifact_class !== 'FIELD_OBSERVATION') {
         return send(response, 400, { environment: 'TEST_ONLY', error: 'INVALID_OPERATION' });
