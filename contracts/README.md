@@ -1,6 +1,6 @@
 # Draft POC Contracts
 
-These files define a public, synthetic client test surface. They are marked `POC_CONTRACT_DRAFT`; they do not ratify production endpoints, certificate formats, signatures, authorization semantics, or canonical domain schemas.
+These files define a public, synthetic client test surface. They are marked `POC_CONTRACT_DRAFT`; they do not ratify production endpoints, certificate formats, signatures, authorization semantics, or canonical (official, single-source-of-truth) domain schemas.
 
 The schemas intentionally keep field observations and issued determinations structurally separate. The client must not convert between them.
 

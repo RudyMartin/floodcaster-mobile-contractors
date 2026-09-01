@@ -4,7 +4,7 @@ Four reference screens define the required information architecture for the two 
 
 ## Redundant distinctions (mandatory)
 
-Certified and user-attested artifacts must be distinguishable without color, for accessibility and for evidentiary screenshots:
+Certified and user-attested artifacts must be distinguishable without color — for accessibility, and because screenshots of these screens are used as proof (in your acceptance evidence, and potentially in real disputes):
 
 | Dimension | Issued determination | Field observation |
 | --- | --- | --- |

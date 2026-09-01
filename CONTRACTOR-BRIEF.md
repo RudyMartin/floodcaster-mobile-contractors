@@ -27,7 +27,7 @@ A proposal, wireframe, architecture memo, generated scaffold, or happy-path demo
 
 - Render issued determinations only from the server response defined by the contract.
 - Display certificate ID, issuer/engine identity, engine digest/version, issuance time, and verification/status state for an issued determination.
-- Render field observations with explicit user/device provenance, observed time, and sync state.
+- Render field observations with explicit user/device provenance (which account created it, on which device — an account identifier is sufficient; no personal name is required), observed time, and sync state.
 - Distinguish observation and determination artifacts by text, iconography, structure, and accessibility semantics; color alone is insufficient.
 - Persist an offline action and its client-generated operation ID before showing a submitted/queued confirmation.
 - Preserve queued work across process termination, device restart where the chosen path supports it, and authentication expiry.

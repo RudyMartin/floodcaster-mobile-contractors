@@ -9,8 +9,7 @@ Name / Fiverr username:
 Date:
 
 1. DELIVERY METHOD (mark one)
-   [ ] Private GitHub repository — link:
-       GitHub user(s) invited:
+   [ ] My provided private workspace repository — final commit SHA:
    [ ] ZIP attached to this Fiverr delivery — filename:
 
 2. HOW TO RUN IT

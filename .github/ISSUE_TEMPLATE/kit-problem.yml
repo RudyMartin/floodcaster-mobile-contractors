@@ -1,0 +1,25 @@
+name: Something in the kit seems broken
+description: The mock, dry-run, fixtures, or docs did not behave as described.
+labels: [kit-problem]
+body:
+  - type: input
+    id: command
+    attributes:
+      label: What did you run?
+      placeholder: e.g. node scripts/dry-run.mjs
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect, and what happened instead?
+      placeholder: Paste the output if you can.
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Your environment
+      placeholder: OS, Node.js version (node --version)
+    validations:
+      required: true

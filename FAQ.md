@@ -1,5 +1,7 @@
 # Contractor FAQ
 
+This FAQ grows from real questions: anything answered in a [GitHub issue](../../issues) gets promoted here so later readers find it without searching.
+
 ## 1. What is being built?
 
 A bounded mobile-client POC. Floodcaster remains the authoritative decision and evidence platform; the phone is one governed client.
@@ -94,4 +96,4 @@ Ask. Floodcaster will provide a sponsored remote real-device session (a commerci
 
 ## 24. How do I ask questions, and what are the deadline and submission process?
 
-Questions: open a GitHub issue on this repository — answers are public so every bidder sees the same information. Deadline: 14 calendar days from accepting the milestone. Submission and payment run through the Fiverr engagement: preferably a private GitHub repository shared with us, or — if you cannot use GitHub — a ZIP of all files attached to the Fiverr delivery. Include the completed assessment response template and paste SUBMISSION-FORM.md into the delivery message. Do not push work into this public repository.
+Questions: open a GitHub issue on this repository — answers are public so every bidder sees the same information. Deadline: 14 calendar days from accepting the milestone. On hire you receive a private workspace repository pre-loaded with this kit; push your work there (visible to you and Floodcaster only, never to other contractors). If you cannot use GitHub, a ZIP of all files attached to the Fiverr delivery is accepted instead. Final delivery: workspace repo (or ZIP) with the completed assessment response template, plus SUBMISSION-FORM.md pasted into the Fiverr delivery message. Payment runs through Fiverr. Do not push work into this public repository.

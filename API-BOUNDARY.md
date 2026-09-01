@@ -27,7 +27,7 @@ The files in `contracts/` are `POC_CONTRACT_DRAFT`, not ratified production cont
 
 ## Write semantics
 
-The mobile client submits an operation containing a user-attested observation and a stable client-generated operation ID. The server response separates:
+The mobile client submits an operation containing a user-attested observation (attested = the user confirms "I observed this"; the server has not verified it yet) and a stable client-generated operation ID. The server response separates:
 
 - transport acknowledgement;
 - replay detection;
