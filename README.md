@@ -44,9 +44,9 @@ npm run build
 3. [ARCHITECTURE.md](ARCHITECTURE.md)
 4. [API-BOUNDARY.md](API-BOUNDARY.md)
 5. [KNOWN-GAPS.md](KNOWN-GAPS.md)
-6. [ASSESSMENT-RESPONSE-TEMPLATE.md](ASSESSMENT-RESPONSE-TEMPLATE.md)
+6. [ASSESSMENT-RESPONSE-TEMPLATE.md](ASSESSMENT-RESPONSE-TEMPLATE.md)\n7. [INFOSEC-FLOW-INDEX.md](docs/infosec/INFOSEC-FLOW-INDEX.md) — five security flow diagrams
 
-## Non-negotiable boundary
+## Infosec review pack\n\nFive rendered SVG diagrams cover trust boundaries, OAuth/authorization, offline reconciliation, sensitive-data handling, and fail-closed threat paths. Start with [the Infosec flow index](docs/infosec/INFOSEC-FLOW-INDEX.md).\n\n## Non-negotiable boundary
 
 The browser/mobile application calls documented HTTPS/JSON APIs. It does not invoke Rust or Python directly.
 

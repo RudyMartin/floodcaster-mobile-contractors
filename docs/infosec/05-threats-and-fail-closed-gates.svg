@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1080" viewBox="0 0 1600 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Threats and fail-closed security gates</title>
+  <desc id="desc">Threat-to-control flow showing token misuse, authority tampering, pack alteration, scope violations, stale revision, replay collisions, and infrastructure failures, with zero-mutation and system-error behavior.</desc>
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#334155"/></marker>
+    <marker id="r" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#b91c1c"/></marker>
+    <marker id="g" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#15803d"/></marker>
+    <style>
+      .title{font:700 34px Inter,Arial,sans-serif;fill:#0f172a}.sub{font:400 17px Inter,Arial,sans-serif;fill:#475569}.head{font:700 15px Inter,Arial,sans-serif;fill:#0f172a}.txt{font:400 12.7px Inter,Arial,sans-serif;fill:#334155}.lane{font:700 18px Inter,Arial,sans-serif;fill:#0f172a}.flow{fill:none;stroke:#334155;stroke-width:2.5;marker-end:url(#a)}.fail{fill:none;stroke:#b91c1c;stroke-width:2.5;marker-end:url(#r)}.pass{fill:none;stroke:#15803d;stroke-width:3;marker-end:url(#g)}
+    </style>
+  </defs>
+  <rect width="1600" height="1080" fill="#f8fafc"/>
+  <text x="60" y="58" class="title">Threats → controls → fail-closed outcomes</text>
+  <text x="60" y="88" class="sub">No failed, ambiguous, stale, unauthorized, or unverifiable input may cause authoritative mutation.</text>
+  <text x="80" y="145" class="lane">Threat / adversarial condition</text><text x="610" y="145" class="lane">Owning validation gate</text><text x="1100" y="145" class="lane">Failure behavior</text>
+
+  <g>
+    <rect x="60" y="180" width="390" height="95" rx="14" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/><text x="85" y="214" class="head">Stolen, expired, or wrong token</text><text x="85" y="240" class="txt">wrong issuer/audience · ID token misuse</text><text x="85" y="262" class="txt">revoked or unmapped subject</text>
+    <rect x="545" y="180" width="390" height="95" rx="14" fill="#fff" stroke="#059669" stroke-width="2"/><text x="570" y="214" class="head">Identity gate</text><text x="570" y="240" class="txt">signature · issuer · audience/client · expiry</text><text x="570" y="262" class="txt">token_use=access · sub→principal mapping</text>
+    <rect x="1040" y="180" width="500" height="95" rx="14" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/><text x="1065" y="214" class="head">HTTP authentication failure</text><text x="1065" y="240" class="txt">no domain outcome · no operation evaluation · zero mutation</text><text x="1065" y="262" class="txt">redacted audit event; no raw token in logs</text>
+    <path d="M450 228 L545 228" class="flow"/><path d="M935 228 L1040 228" class="fail"/>
+
+    <rect x="60" y="300" width="390" height="95" rx="14" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/><text x="85" y="334" class="head">Tampered operation or authority</text><text x="85" y="360" class="txt">changed signed fields · malformed schema</text><text x="85" y="382" class="txt">invalid key, signature, digest, or canonical bytes</text>
+    <rect x="545" y="300" width="390" height="95" rx="14" fill="#fff" stroke="#059669" stroke-width="2"/><text x="570" y="334" class="head">Integrity gate</text><text x="570" y="360" class="txt">strict schema · canonicalization · digest</text><text x="570" y="382" class="txt">Ed25519 verification against governed key identity</text>
+    <rect x="1040" y="300" width="500" height="95" rx="14" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/><text x="1065" y="334" class="head">REJECTED</text><text x="1065" y="360" class="txt">specific subordinate integrity code · zero mutation</text><text x="1065" y="382" class="txt">never repair or reinterpret signed input silently</text>
+    <path d="M450 348 L545 348" class="flow"/><path d="M935 348 L1040 348" class="fail"/>
+
+    <rect x="60" y="420" width="390" height="95" rx="14" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/><text x="85" y="454" class="head">Altered or mismatched PMTiles</text><text x="85" y="480" class="txt">corrupt bytes · substituted pack · stale manifest</text><text x="85" y="502" class="txt">presentation used as false authorization evidence</text>
+    <rect x="545" y="420" width="390" height="95" rx="14" fill="#fff" stroke="#059669" stroke-width="2"/><text x="570" y="454" class="head">Pack provenance gate</text><text x="570" y="480" class="txt">SHA-256 over exact raw PMTiles bytes</text><text x="570" y="502" class="txt">signed manifest binding; server AOI still authoritative</text>
+    <rect x="1040" y="420" width="500" height="95" rx="14" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/><text x="1065" y="454" class="head">REJECTED / PACK_DIGEST_MISMATCH</text><text x="1065" y="480" class="txt">zero mutation · quarantine local pack state</text><text x="1065" y="502" class="txt">pack presence never upgrades scope</text>
+    <path d="M450 468 L545 468" class="flow"/><path d="M935 468 L1040 468" class="fail"/>
+
+    <rect x="60" y="540" width="390" height="95" rx="14" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/><text x="85" y="574" class="head">Expired/revoked scope or AOI violation</text><text x="85" y="600" class="txt">observed_at outside authority window</text><text x="85" y="622" class="txt">lag exceeded · action/team/AOI not delegated</text>
+    <rect x="545" y="540" width="390" height="95" rx="14" fill="#fff" stroke="#059669" stroke-width="2"/><text x="570" y="574" class="head">Authority + policy + AOI gates</text><text x="570" y="600" class="txt">separate clocks · revocation · governed policy</text><text x="570" y="622" class="txt">authoritative PostGIS feature-to-AOI membership</text>
+    <rect x="1040" y="540" width="500" height="95" rx="14" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/><text x="1065" y="574" class="head">REJECTED / governed scope code</text><text x="1065" y="600" class="txt">zero mutation · preserve attempt as audit evidence</text><text x="1065" y="622" class="txt">never trust map display or Cognito group for scope</text>
+    <path d="M450 588 L545 588" class="flow"/><path d="M935 588 L1040 588" class="fail"/>
+
+    <rect x="60" y="660" width="390" height="95" rx="14" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/><text x="85" y="694" class="head">Stale revision, replay, or collision</text><text x="85" y="720" class="txt">concurrent update · repeated request</text><text x="85" y="742" class="txt">same operation_id with different digest</text>
+    <rect x="545" y="660" width="390" height="95" rx="14" fill="#fff" stroke="#059669" stroke-width="2"/><text x="570" y="694" class="head">Revision + idempotency gates</text><text x="570" y="720" class="txt">lock/read authoritative revision</text><text x="570" y="742" class="txt">unique operation_id bound to canonical digest</text>
+    <rect x="1040" y="660" width="500" height="95" rx="14" fill="#fef3c7" stroke="#d97706" stroke-width="2"/><text x="1065" y="694" class="head">Three distinct results</text><text x="1065" y="720" class="txt">same ID + digest → original result, replay=true, zero mutation</text><text x="1065" y="742" class="txt">different digest → REJECTED collision; stale revision → policy result</text>
+    <path d="M450 708 L545 708" class="flow"/><path d="M935 708 L1040 708" class="fail"/>
+
+    <rect x="60" y="780" width="390" height="95" rx="14" fill="#e2e8f0" stroke="#64748b" stroke-width="2"/><text x="85" y="814" class="head">Database, KMS, network, or program failure</text><text x="85" y="840" class="txt">timeout · unavailable key · failed transaction</text><text x="85" y="862" class="txt">invalid attached signature · unexpected exception</text>
+    <rect x="545" y="780" width="390" height="95" rx="14" fill="#fff" stroke="#64748b" stroke-width="2"/><text x="570" y="814" class="head">System-error boundary</text><text x="570" y="840" class="txt">transaction rollback · publication remains blocked</text><text x="570" y="862" class="txt">certificate cannot be served as certified</text>
+    <rect x="1040" y="780" width="500" height="95" rx="14" fill="#e2e8f0" stroke="#64748b" stroke-width="2"/><text x="1065" y="814" class="head">SYSTEM_ERROR — not REJECTED</text><text x="1065" y="840" class="txt">no fabricated domain determination · zero partial mutation</text><text x="1065" y="862" class="txt">retry only under governed idempotency rules</text>
+    <path d="M450 828 L545 828" class="flow"/><path d="M935 828 L1040 828" class="flow"/>
+  </g>
+
+  <rect x="300" y="930" width="1000" height="105" rx="16" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="800" y="965" text-anchor="middle" class="head" fill="#166534">Only after every applicable gate passes</text>
+  <text x="800" y="993" text-anchor="middle" class="txt">APPLIED = one atomic transaction containing authoritative mutation + revision + ACCEPT certificate + receipt + idempotency result</text>
+  <text x="800" y="1018" text-anchor="middle" class="txt">No mutation without certificate and receipt; no persisted ACCEPT certificate without the committed mutation.</text>
+</svg>

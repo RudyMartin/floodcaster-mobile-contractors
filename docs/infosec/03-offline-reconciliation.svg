@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100" role="img" aria-labelledby="title desc">
+  <title id="title">Offline operation and server reconciliation flow</title>
+  <desc id="desc">Three-phase flow showing online bootstrap, offline claim capture, reconnection, fail-closed Rust validation, and separate APPLIED, VERIFY_REQUIRED, REJECTED, and SYSTEM_ERROR paths.</desc>
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#334155"/></marker>
+    <marker id="g" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#15803d"/></marker>
+    <marker id="r" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#b91c1c"/></marker>
+    <style>
+      .title{font:700 34px Inter,Arial,sans-serif;fill:#0f172a}.sub{font:400 17px Inter,Arial,sans-serif;fill:#475569}
+      .phase{font:700 20px Inter,Arial,sans-serif;fill:#0f172a}.head{font:700 16px Inter,Arial,sans-serif;fill:#0f172a}.txt{font:400 13.5px Inter,Arial,sans-serif;fill:#334155}.small{font:500 12.5px Inter,Arial,sans-serif;fill:#475569}
+      .flow{fill:none;stroke:#334155;stroke-width:2.6;marker-end:url(#a)}.pass{fill:none;stroke:#15803d;stroke-width:3;marker-end:url(#g)}.fail{fill:none;stroke:#b91c1c;stroke-width:2.7;marker-end:url(#r)}
+    </style>
+  </defs>
+  <rect width="1600" height="1100" fill="#f8fafc"/>
+  <text x="60" y="58" class="title">Offline FIELD_REVIEWED → authoritative reconciliation</text>
+  <text x="60" y="88" class="sub">The client records immutable evidence offline; server gates decide whether any authoritative mutation may occur.</text>
+
+  <rect x="50" y="125" width="470" height="825" rx="22" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+  <text x="75" y="165" class="phase">A · Online bootstrap</text>
+  <rect x="90" y="215" width="390" height="90" rx="14" fill="#fff" stroke="#60a5fa" stroke-width="2"/>
+  <text x="115" y="248" class="head">1 · Authenticate and bootstrap</text><text x="115" y="274" class="txt">Cognito access token → approved /mobile/v1 endpoint</text>
+  <path d="M285 305 L285 350" class="flow"/>
+  <rect x="90" y="350" width="390" height="120" rx="14" fill="#fff" stroke="#60a5fa" stroke-width="2"/>
+  <text x="115" y="383" class="head">2 · Receive governed material</text><text x="115" y="409" class="txt">signed offline authority · pack manifest</text><text x="115" y="432" class="txt">immutable PMTiles · policy/reference metadata</text><text x="115" y="455" class="txt">all from approved test or governed service</text>
+  <path d="M285 470 L285 515" class="flow"/>
+  <rect x="90" y="515" width="390" height="140" rx="14" fill="#fff" stroke="#60a5fa" stroke-width="2"/>
+  <text x="115" y="548" class="head">3 · Verify before AVAILABLE</text><text x="115" y="574" class="txt">authority signature + issuer/key reference</text><text x="115" y="597" class="txt">manifest signature · raw PMTiles SHA-256</text><text x="115" y="620" class="txt">pack/manifest binding and local write completion</text><text x="115" y="643" class="txt">failure → never enter AVAILABLE</text>
+  <path d="M285 655 L285 700" class="flow"/>
+  <rect x="90" y="700" width="390" height="145" rx="14" fill="#fff" stroke="#60a5fa" stroke-width="2"/>
+  <text x="115" y="733" class="head">4 · Persist for offline use</text><text x="115" y="759" class="txt">OPFS: exact PMTiles bytes</text><text x="115" y="782" class="txt">IndexedDB: authority, digest, journal metadata</text><text x="115" y="805" class="txt">PMTiles presence proves presentation only</text><text x="115" y="828" class="txt">it never grants AOI/action authorization</text>
+
+  <rect x="565" y="125" width="470" height="825" rx="22" fill="#faf5ff" stroke="#9333ea" stroke-width="2"/>
+  <text x="590" y="165" class="phase">B · Offline field work</text>
+  <rect x="605" y="235" width="390" height="115" rx="14" fill="#fff" stroke="#c084fc" stroke-width="2"/>
+  <text x="630" y="268" class="head">5 · Operator selects feature</text><text x="630" y="294" class="txt">render from verified pack; capture GPS/camera evidence</text><text x="630" y="317" class="txt">local display is not authoritative AOI membership</text><text x="630" y="340" class="txt">and is not proof of current revision</text>
+  <path d="M800 350 L800 400" class="flow"/>
+  <rect x="605" y="400" width="390" height="170" rx="14" fill="#fff" stroke="#c084fc" stroke-width="2"/>
+  <text x="630" y="433" class="head">6 · Record immutable claim</text><text x="630" y="459" class="txt">operation = FIELD_REVIEWED</text><text x="630" y="482" class="txt">operation_id + canonical operation_digest</text><text x="630" y="505" class="txt">observed_at · feature/base revision · authority digest</text><text x="630" y="528" class="txt">pack manifest digest · bounded evidence references</text><text x="630" y="551" class="txt">seal canonical content at RECORDED</text>
+  <path d="M800 570 L800 620" class="flow"/>
+  <rect x="605" y="620" width="390" height="125" rx="14" fill="#fff" stroke="#c084fc" stroke-width="2"/>
+  <text x="630" y="653" class="head">7 · Queue, never determine</text><text x="630" y="679" class="txt">retry metadata stays outside canonical operation</text><text x="630" y="702" class="txt">client state may be PENDING / RETRYING</text><text x="630" y="725" class="txt">client may never write APPLIED</text>
+  <rect x="625" y="790" width="350" height="75" rx="12" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+  <text x="650" y="821" class="head" fill="#991b1b">Forbidden offline shortcut</text><text x="650" y="847" class="txt">pack presence or local validation → APPLIED</text>
+
+  <rect x="1080" y="125" width="470" height="825" rx="22" fill="#ecfdf5" stroke="#059669" stroke-width="2"/>
+  <text x="1105" y="165" class="phase">C · Reconnect and reconcile</text>
+  <rect x="1120" y="205" width="390" height="80" rx="14" fill="#fff" stroke="#34d399" stroke-width="2"/>
+  <text x="1145" y="238" class="head">8 · Submit batch</text><text x="1145" y="264" class="txt">POST /mobile/v1/operations over HTTPS</text>
+  <path d="M1315 285 L1315 325" class="flow"/>
+  <rect x="1120" y="325" width="390" height="260" rx="14" fill="#fff" stroke="#34d399" stroke-width="2"/>
+  <text x="1145" y="358" class="head">9 · Rust fail-closed gate chain</text>
+  <text x="1145" y="389" class="txt">① token identity and principal mapping</text><text x="1145" y="414" class="txt">② operation schema, canonical bytes, digest</text>
+  <text x="1145" y="439" class="txt">③ authority signature, window, lag, revocation</text><text x="1145" y="464" class="txt">④ policy and authoritative AOI membership</text>
+  <text x="1145" y="489" class="txt">⑤ pack-manifest digest and base revision</text><text x="1145" y="514" class="txt">⑥ operation_id replay / digest collision</text>
+  <text x="1145" y="539" class="txt">⑦ required evidence and RSCT predicates</text><text x="1145" y="564" class="txt">each operation receives an independent result</text>
+  <path d="M1315 585 L1315 630" class="pass"/>
+  <rect x="1120" y="630" width="390" height="135" rx="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="1145" y="663" class="head" fill="#166534">10A · APPLIED</text><text x="1145" y="689" class="txt">one transaction: lock/read → verify → mutate</text><text x="1145" y="712" class="txt">increment revision → certificate → receipt</text><text x="1145" y="735" class="txt">idempotency result → commit</text><text x="1145" y="758" class="txt">no mutation without certificate + receipt</text>
+  <rect x="1100" y="805" width="130" height="95" rx="12" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="1165" y="837" text-anchor="middle" class="head">10B</text><text x="1165" y="861" text-anchor="middle" class="txt">VERIFY_REQUIRED</text><text x="1165" y="884" text-anchor="middle" class="small">zero mutation</text>
+  <rect x="1250" y="805" width="120" height="95" rx="12" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+  <text x="1310" y="837" text-anchor="middle" class="head">10C</text><text x="1310" y="861" text-anchor="middle" class="txt">REJECTED</text><text x="1310" y="884" text-anchor="middle" class="small">zero mutation</text>
+  <rect x="1390" y="805" width="140" height="95" rx="12" fill="#e2e8f0" stroke="#64748b" stroke-width="2"/>
+  <text x="1460" y="837" text-anchor="middle" class="head">Separate lane</text><text x="1460" y="861" text-anchor="middle" class="txt">SYSTEM_ERROR</text><text x="1460" y="884" text-anchor="middle" class="small">not a domain result</text>
+  <path d="M1205 585 C1165 680 1165 740 1165 805" class="fail"/><path d="M1310 585 L1310 805" class="fail"/><path d="M1420 585 C1460 680 1460 740 1460 805" class="flow"/>
+
+  <path d="M480 770 C535 770 550 680 605 680" class="flow"/><text x="505" y="744" class="small">go offline</text>
+  <path d="M995 680 C1040 680 1055 245 1120 245" class="flow"/><text x="1015" y="470" class="small">connectivity returns</text>
+  <rect x="50" y="990" width="1500" height="70" rx="14" fill="#fff" stroke="#cbd5e1"/>
+  <text x="75" y="1022" class="head">Infosec invariant</text><text x="230" y="1022" class="txt">Every client-controlled fact is revalidated against governed server state before mutation; ambiguity or internal failure cannot silently become APPLIED.</text>
+  <text x="75" y="1047" class="small">Exact replay returns the original result with replay=true and zero mutation; same operation_id with a different digest is REJECTED / OPERATION_ID_COLLISION.</text>
+</svg>
+
