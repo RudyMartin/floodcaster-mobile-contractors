@@ -1,0 +1,33 @@
+:root {
+  --bg-primary: #0C0F13;
+  --bg-secondary: #13171D;
+  --bg-card: #171C23;
+  --text-primary: #E6E3DC;
+  --text-secondary: #8A867E;
+  --accent-blue: #5AA9DE;
+  --accent-green: #46A06B;
+  --accent-amber: #D4A017;
+  --accent-red: #C6485B;
+  --accent-red-text: #E07A8B; /* lightened for small text on dark (AA); use --accent-red for fills/borders */
+  --border: #2A2E35;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: var(--font-mono);
+}

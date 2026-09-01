@@ -1,0 +1,15 @@
+{
+  "short_name": "Floodcaster",
+  "name": "Floodcaster Intel",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0C0F13",
+  "background_color": "#0C0F13"
+}
