@@ -1,0 +1,49 @@
+{
+  "version": 8,
+  "name": "Floodcaster Gate 0 La Crosse (TEST_ONLY)",
+  "sources": {
+    "gate0": {
+      "type": "vector",
+      "url": "pmtiles://gate0-lacrosse-v1.pmtiles"
+    }
+  },
+  "layers": [
+    { "id": "background", "type": "background", "paint": { "background-color": "#f6f4ef" } },
+    {
+      "id": "flood-complex-fill",
+      "type": "fill",
+      "source": "gate0",
+      "source-layer": "flood-complex",
+      "paint": { "fill-color": "#d8dee6", "fill-opacity": 0.5 }
+    },
+    {
+      "id": "flood-normal-sfha",
+      "type": "fill",
+      "source": "gate0",
+      "source-layer": "flood-normal",
+      "filter": ["==", ["get", "SFHA_TF"], "T"],
+      "paint": { "fill-color": "#7aa5c9", "fill-opacity": 0.55 }
+    },
+    {
+      "id": "flood-normal-outline",
+      "type": "line",
+      "source": "gate0",
+      "source-layer": "flood-normal",
+      "paint": { "line-color": "#4a6b8a", "line-width": 0.8 }
+    },
+    {
+      "id": "properties-fill",
+      "type": "fill",
+      "source": "gate0",
+      "source-layer": "properties",
+      "paint": { "fill-color": "#c9a227", "fill-opacity": 0.25 }
+    },
+    {
+      "id": "properties-outline",
+      "type": "line",
+      "source": "gate0",
+      "source-layer": "properties",
+      "paint": { "line-color": "#8a6d1a", "line-width": 1.2 }
+    }
+  ]
+}

@@ -6,12 +6,12 @@
   "certificate_id": "CERT-TEST-001",
   "map_pack": {
     "environment": "TEST_ONLY",
-    "pack_id": "PACK-TEST-001",
-    "aoi_id": "AOI-TEST-001",
-    "content_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
-    "size_bytes": 0,
-    "data_license": "NO_BINARY_INCLUDED_TEST_HANDOFF_ONLY",
-    "download_uri": "https://example.invalid/floodcaster/test-pack.pmtiles",
+    "pack_id": "PACK-TEST-LACROSSE-V1",
+    "aoi_id": "AOI-TEST-LACROSSE-V1",
+    "content_sha256": "73d93d388a20d70140f98745b59ec5df4df11f353cd6e80847d0644e89b992a6",
+    "size_bytes": 602118,
+    "data_license": "WI Statewide Parcel V12 (open data) + FEMA NFHL (US public domain); TEST_ONLY presentation derivative",
+    "download_uri": "http://127.0.0.1:8787/mobile/v1/map-pack",
     "authoritative": false,
     "purpose": "PRESENTATION"
   }

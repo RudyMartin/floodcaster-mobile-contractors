@@ -90,6 +90,21 @@ paths:
               schema: { type: object }
         '404':
           $ref: '#/components/responses/NotFound'
+  /mobile/v1/map-pack:
+    get:
+      tags: [Read models]
+      summary: Download the offline map pack binary
+      description: >-
+        PMTiles archive for the corpus test area. The client verifies the
+        downloaded bytes against content_sha256 from the bootstrap map_pack
+        manifest before marking the pack available offline. Presentation data
+        only; pack membership is never authorization.
+      responses:
+        '200':
+          description: PMTiles binary
+          content:
+            application/octet-stream:
+              schema: { type: string, format: binary }
   /mobile/v1/properties/{property_id}:
     get:
       tags: [Read models]

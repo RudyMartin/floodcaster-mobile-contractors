@@ -82,6 +82,15 @@ try {
     }
   });
 
+  await step('B1 map pack downloads and matches manifest digest', async () => {
+    const { body } = await json('/mobile/v1/bootstrap');
+    const bytes = Buffer.from(await (await fetch(`${base}/mobile/v1/map-pack`)).arrayBuffer());
+    expect(bytes.length === body.map_pack.size_bytes, `size ${bytes.length}`);
+    const digest = createHash('sha256').update(bytes).digest('hex');
+    expect(digest === body.map_pack.content_sha256, 'pack digest mismatch');
+    expect(body.map_pack.authoritative === false, 'pack must be non-authoritative');
+  });
+
   const observation = JSON.parse(await readFile(join(root, 'fixtures', 'field-observation.json'), 'utf8'));
   const operationBody = JSON.stringify({
     operation_id: observation.operation_id,
