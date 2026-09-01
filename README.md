@@ -45,6 +45,12 @@ node mock-server/server.mjs
 
 The mock serves only synthetic `TEST_ONLY` fixtures. It is not Floodcaster backend code and is not a production API.
 
+Sanity-check your environment (boots the mock, walks every contract scenario, verifies layer digests):
+
+```bash
+node scripts/dry-run.mjs
+```
+
 ## What is fixed and what is open
 
 | Fixed | Open for evidence-based recommendation |

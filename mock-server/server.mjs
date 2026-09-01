@@ -111,6 +111,17 @@ createServer(async (request, response) => {
       });
     }
 
+    if (key === 'GET /mobile/v1/map-pack') {
+      const path = join(here, '..', 'map-pack', 'gate0-lacrosse-v1.pmtiles');
+      const { size } = await stat(path);
+      response.writeHead(200, {
+        'content-type': 'application/octet-stream',
+        'content-length': size,
+        'access-control-allow-origin': '*'
+      });
+      return createReadStream(path).pipe(response);
+    }
+
     const layerMatch = url.pathname.match(/^\/mobile\/v1\/layers\/([a-z0-9-]+)$/);
     if (request.method === 'GET' && layerMatch && layerFiles[layerMatch[1]]) {
       const path = join(corpusDir, layerFiles[layerMatch[1]]);
