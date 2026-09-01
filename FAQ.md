@@ -116,4 +116,4 @@ The automated tests for your own app (deliverable 4) are yours to write. Unit te
 
 ## 27. Should I use the Floodcaster logo?
 
-No. Do not copy the logo from our website, and do not draw your own version. Use plain text (for example "Floodcaster Field POC") and the favicon supplied in this kit. The POC is judged on behavior and evidence, not visual branding. Official brand assets come later, in the next stage, as files we supply with usage rules — the same principle as certified data: the client never manufactures what the platform owns.
+Do not copy the logo from our website, and do not draw your own version. While bidding, plain text (for example "Floodcaster Field POC") is all you need. Hired contractors receive the official brand files in their private workspace (`brand/` folder), with simple usage rules. The principle is the same as for certified data: the client never manufactures what the platform owns — it uses what the platform supplies.
