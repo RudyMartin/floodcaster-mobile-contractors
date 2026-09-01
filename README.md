@@ -65,7 +65,7 @@ If a scenario surprises you, the fixture for it is in [fixtures/](fixtures/READM
 The practical facts:
 
 - **Price:** $200, fixed, for exactly the ten deliverables in [CONTRACTOR-BRIEF.md](CONTRACTOR-BRIEF.md). Nothing is added or negotiated later inside this milestone.
-- **Deadline:** 14 calendar days from the day you accept the milestone.
+- **Deadline:** September 16, 2026 (end of day, your local time).
 - **Questions:** open a [GitHub issue](../../issues) on this repository. Questions and answers are public so every bidder sees the same information — good questions improve the FAQ for everyone.
 - **Workspace:** when hired, you receive an invite to your own private workspace repository, pre-loaded with this kit (mock, fixtures, dry-run). Push your work there as you go — you and Floodcaster can see it; other contractors cannot. If you cannot use GitHub, a ZIP of all files attached to the Fiverr delivery is an accepted alternative.
 - **Submission and payment:** through the Fiverr engagement. Final delivery = your workspace repository (or ZIP) containing the completed [ASSESSMENT-RESPONSE-TEMPLATE.md](ASSESSMENT-RESPONSE-TEMPLATE.md), plus [SUBMISSION-FORM.md](SUBMISSION-FORM.md) pasted into the Fiverr delivery message. Never push contractor work into this public repository.
