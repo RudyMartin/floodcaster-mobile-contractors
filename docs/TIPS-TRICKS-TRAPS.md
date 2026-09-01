@@ -18,7 +18,7 @@ Practical lessons for this POC. Every trap here corresponds to a disqualifying f
 9. **Make process-kill part of your dev loop.** Force-stop the app after every meaningful change, not just during the final script run. Durability bugs found early are trivial; found late they are rewrites.
 10. **Read the failure catalog in the README before the happy path.** The scoring weight is in the failure behavior, not in how pretty the map is.
 11. **Use the layer index digests.** `/mobile/v1/layers` pins sha256 for every layer, and the bootstrap pins the map pack digest. Verifying them costs a few lines and gives you free integrity evidence for your submission.
-12. **Ask early, in the open.** Questions go to GitHub issues; answers are public and fast. One good question on day 2 is worth more than three days of guessing — and it never counts against you.
+12. **Ask early.** Questions go in your Fiverr conversation (kit bugs can also be GitHub issues); answers that help everyone get published in the FAQ. One good question on day 2 is worth more than three days of guessing — and it never counts against you.
 
 ## Tips (worth knowing)
 
