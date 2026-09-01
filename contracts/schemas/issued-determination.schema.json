@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.floodcaster.example.invalid/mobile/v1/issued-determination.schema.json",
+  "title": "Issued determination",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["environment", "schema_version", "artifact_class", "determination_id", "property_id", "result", "certificate_id", "issuer", "engine", "issued_at", "artifact_digest", "determination_authority", "determination_state", "verification"],
+  "properties": {
+    "environment": { "const": "TEST_ONLY" },
+    "schema_version": { "const": "1.0.0-poc" },
+    "artifact_class": { "const": "ISSUED_DETERMINATION" },
+    "determination_id": { "type": "string" },
+    "property_id": { "type": "string" },
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classification", "summary", "source_revision"],
+      "properties": {
+        "classification": { "type": "string" },
+        "summary": { "type": "string" },
+        "source_revision": { "type": "string" }
+      }
+    },
+    "certificate_id": { "type": "string" },
+    "issuer": { "type": "string" },
+    "engine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity", "version", "digest"],
+      "properties": {
+        "identity": { "type": "string" },
+        "version": { "type": "string" },
+        "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" }
+      }
+    },
+    "issued_at": { "type": "string", "format": "date-time" },
+    "artifact_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "determination_authority": { "const": "FLOODCASTER" },
+    "determination_state": { "const": "ISSUED" },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "verified_at"],
+      "properties": {
+        "status": { "enum": ["CURRENT", "SUPERSEDED", "REVOKED", "UNKNOWN"] },
+        "verified_at": { "type": ["string", "null"], "format": "date-time" },
+        "superseded_by": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

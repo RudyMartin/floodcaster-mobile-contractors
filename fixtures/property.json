@@ -1,0 +1,10 @@
+{
+  "environment": "TEST_ONLY",
+  "property_id": "PROP-TEST-001",
+  "display_address": "100 Test Lane, Example City",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[[-86.7851, 36.1624], [-86.7849, 36.1624], [-86.7849, 36.1626], [-86.7851, 36.1626], [-86.7851, 36.1624]]]
+  },
+  "determination_ids": ["DET-TEST-001"]
+}

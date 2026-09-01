@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.floodcaster.example.invalid/mobile/v1/map-pack-manifest.schema.json",
+  "title": "Test map-pack manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["environment", "pack_id", "aoi_id", "content_sha256", "size_bytes", "data_license", "download_uri", "authoritative", "purpose"],
+  "properties": {
+    "environment": { "const": "TEST_ONLY" },
+    "pack_id": { "type": "string" },
+    "aoi_id": { "type": "string" },
+    "content_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "size_bytes": { "type": "integer", "minimum": 0 },
+    "data_license": { "type": "string" },
+    "download_uri": { "type": "string", "format": "uri" },
+    "authoritative": { "const": false },
+    "purpose": { "const": "PRESENTATION" }
+  }
+}

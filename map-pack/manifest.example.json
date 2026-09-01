@@ -1,0 +1,11 @@
+{
+  "environment": "TEST_ONLY",
+  "pack_id": "PACK-TEST-001",
+  "aoi_id": "AOI-TEST-001",
+  "content_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "size_bytes": 0,
+  "data_license": "NO_BINARY_INCLUDED_TEST_HANDOFF_ONLY",
+  "download_uri": "https://example.invalid/floodcaster/test-pack.pmtiles",
+  "authoritative": false,
+  "purpose": "PRESENTATION"
+}

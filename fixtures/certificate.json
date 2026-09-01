@@ -1,0 +1,14 @@
+{
+  "environment": "TEST_ONLY",
+  "certificate_id": "CERT-TEST-001",
+  "determination_id": "DET-TEST-001",
+  "issuer": "Floodcaster Test Authority",
+  "engine_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "issued_at": "2026-09-01T13:14:00Z",
+  "artifact_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+  "signature": {
+    "algorithm": "TEST_ONLY-Ed25519",
+    "key_id": "TEST-KEY-NOT-A-REAL-KEY",
+    "value": "TEST_ONLY_NOT_A_SIGNATURE"
+  }
+}

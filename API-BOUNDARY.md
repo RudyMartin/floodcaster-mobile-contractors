@@ -1,34 +1,41 @@
 # API Boundary
 
-## Decision
+## Rule
 
-Do not convert Rust or Python internals into MCP calls for Mobile MVP1. The contractor-facing boundary is HTTPS/JSON.
+Mobile and web clients use a conventional versioned HTTPS/JSON API. Agents may use MCP in parallel. Both interfaces converge on the same governed Floodcaster domain authority.
 
-| Concern | Required boundary |
-|---|---|
-| Existing SPA calls | Client wrapper in src/api.js |
-| Mobile identity | Cognito access token to /mobile/v1/* |
-| Offline authorization | Floodcaster-signed offline authority artifact |
-| Operation submission | POST /mobile/v1/operations, batch-capable with independent per-operation results |
-| Authoritative decision | Rust floodcaster-platform |
-| Data mutation | Governed server transaction only |
-| Python processing | Backend/build-time only; never browser subprocess execution |
-| MCP | Out of scope for Mobile MVP1 |
+```mermaid
+flowchart LR
+    M["Mobile and web"] -->|HTTPS/JSON| G["Governed services"]
+    A["Agents"] -->|MCP| G
+    G --> R["Authoritative results and certificates"]
+```
 
-## Existing reference endpoints
+The mobile client does not directly call Rust, Python, PostGIS, model storage, or certificate internals.
 
-The copied SPA contains calls for /health, /demo/session, /geocode, /certify, /certify/geo, /certify/pair, /lookup, /zone, /rings, /certificates/lookup, /run, /status/{id}, /jobs/{id}, /jobs/{id}/buildings, /v1/signup, /v1/account, /v1/billing/checkout, and /v1/certificate.
+## POC contract
 
-These endpoints describe the existing SPA only. They do not define the Mobile MVP1 contract and must not be copied mechanically into the target client.
+[contracts/floodcaster-mobile.openapi.yaml](contracts/floodcaster-mobile.openapi.yaml) defines the draft test surface:
 
-## Public briefing safety
+- `GET /mobile/v1/bootstrap`
+- `GET /mobile/v1/properties/{property_id}`
+- `GET /mobile/v1/determinations/{determination_id}`
+- `GET /mobile/v1/certificates/{certificate_id}`
+- `POST /mobile/v1/operations`
 
-- The repository defaults to http://localhost:8787.
-- Use mocks or an explicitly approved test endpoint.
-- Never commit tokens, API keys, Cognito secrets, customer data, AWS details, or production URLs that carry sensitive query material.
-- A browser OAuth client must not have a client secret or IAM credentials.
-- Treat HTTP failures separately from APPLIED, VERIFY_REQUIRED, or REJECTED.
+The files in `contracts/` are `POC_CONTRACT_DRAFT`, not ratified production contracts. Synthetic fixtures are labeled `TEST_ONLY`. Unknown production semantics are listed in [KNOWN-GAPS.md](KNOWN-GAPS.md).
 
-## Unresolved interface rule
+## Write semantics
 
-If an exact /mobile/v1 request, response, status-code, or schema is not provided, record it as a question. Do not invent it and do not infer it from the existing SPA.
+The mobile client submits an operation containing a user-attested observation and a stable client-generated operation ID. The server response separates:
+
+- transport acknowledgement;
+- replay detection;
+- domain outcome (`APPLIED`, `VERIFY_REQUIRED`, or `REJECTED`); and
+- any later issued determination/certificate references.
+
+The client never resolves a conflict by declaring its local value authoritative. A successful HTTP response does not itself mean a determination was issued.
+
+## Mock behavior
+
+The local mock supports named scenarios through `X-Floodcaster-Mock-Scenario`: `applied`, `verify-required`, `rejected`, `replay`, and `collision`. This header is mock-only and must not be implemented as a production feature.

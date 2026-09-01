@@ -1,0 +1,169 @@
+openapi: 3.1.0
+info:
+  title: Floodcaster Mobile POC API
+  version: 0.2.0-draft
+  description: >-
+    POC_CONTRACT_DRAFT. Synthetic public evaluation surface only. This contract
+    is not a production endpoint commitment and exposes no Floodcaster internals.
+servers:
+  - url: http://localhost:8787
+    description: TEST_ONLY local mock
+tags:
+  - name: Read models
+  - name: Operations
+paths:
+  /mobile/v1/bootstrap:
+    get:
+      tags: [Read models]
+      summary: Load the synthetic POC entry point
+      responses:
+        '200':
+          description: Bootstrap read model
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bootstrap'
+  /mobile/v1/properties/{property_id}:
+    get:
+      tags: [Read models]
+      summary: Get a server-owned property read model
+      parameters:
+        - $ref: '#/components/parameters/PropertyId'
+      responses:
+        '200':
+          description: Property read model
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyReadModel'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /mobile/v1/determinations/{determination_id}:
+    get:
+      tags: [Read models]
+      summary: Get a persisted engine-issued determination
+      parameters:
+        - name: determination_id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Issued determination
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/issued-determination.schema.json'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /mobile/v1/certificates/{certificate_id}:
+    get:
+      tags: [Read models]
+      summary: Get the certificate attached to an issued determination
+      parameters:
+        - name: certificate_id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Certificate envelope
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/certificate.schema.json'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /mobile/v1/operations:
+    post:
+      tags: [Operations]
+      summary: Submit one durable client operation for server adjudication
+      description: >-
+        X-Floodcaster-Mock-Scenario is accepted only by the TEST_ONLY mock and
+        selects applied, verify-required, rejected, replay, or collision.
+      parameters:
+        - name: X-Floodcaster-Mock-Scenario
+          in: header
+          required: false
+          schema:
+            type: string
+            enum: [applied, verify-required, rejected, replay, collision]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OperationRequest'
+      responses:
+        '200':
+          description: Acknowledged operation with separate domain outcome
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/operation-result.schema.json'
+        '409':
+          description: Stable operation ID was reused with a different payload
+          content:
+            application/json:
+              schema:
+                $ref: './schemas/operation-result.schema.json'
+components:
+  parameters:
+    PropertyId:
+      name: property_id
+      in: path
+      required: true
+      schema: { type: string }
+  responses:
+    NotFound:
+      description: Synthetic object not found
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [environment, error]
+            properties:
+              environment: { const: TEST_ONLY }
+              error: { const: NOT_FOUND }
+  schemas:
+    OperationRequest:
+      type: object
+      additionalProperties: false
+      required: [operation_id, operation_type, observation]
+      properties:
+        operation_id:
+          type: string
+          pattern: '^OP-TEST-[A-Z0-9-]+$'
+        operation_type:
+          const: SUBMIT_FIELD_OBSERVATION
+        observation:
+          $ref: './schemas/field-observation.schema.json'
+    Bootstrap:
+      type: object
+      additionalProperties: false
+      required: [environment, contract_status, property_id, determination_id, certificate_id, map_pack]
+      properties:
+        environment: { const: TEST_ONLY }
+        contract_status: { const: POC_CONTRACT_DRAFT }
+        property_id: { type: string }
+        determination_id: { type: string }
+        certificate_id: { type: string }
+        map_pack:
+          $ref: './schemas/map-pack-manifest.schema.json'
+    PropertyReadModel:
+      type: object
+      additionalProperties: false
+      required: [environment, property_id, display_address, geometry, determination_ids]
+      properties:
+        environment: { const: TEST_ONLY }
+        property_id: { type: string }
+        display_address: { type: string }
+        geometry:
+          type: object
+          required: [type, coordinates]
+          properties:
+            type: { const: Polygon }
+            coordinates: { type: array }
+        determination_ids:
+          type: array
+          items: { type: string }

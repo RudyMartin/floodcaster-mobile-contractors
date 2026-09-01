@@ -1,0 +1,16 @@
+{
+  "environment": "TEST_ONLY",
+  "operation_id": "OP-TEST-001",
+  "transport_state": "REJECTED_AT_BOUNDARY",
+  "replay": false,
+  "domain_outcome": "REJECTED",
+  "evidence_state": "UNASSESSED",
+  "determination_state": "NOT_ISSUED",
+  "acknowledged_at": "2026-09-01T14:05:00Z",
+  "determination_id": null,
+  "certificate_id": null,
+  "error": {
+    "code": "OPERATION_ID_COLLISION",
+    "message": "Operation ID was previously used with a different payload."
+  }
+}

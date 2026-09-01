@@ -1,0 +1,29 @@
+{
+  "environment": "TEST_ONLY",
+  "schema_version": "1.0.0-poc",
+  "artifact_class": "FIELD_OBSERVATION",
+  "observation_id": "OBS-TEST-001",
+  "property_id": "PROP-TEST-001",
+  "created_by": {
+    "principal_id": "USER-TEST-001",
+    "source": "MOBILE_USER"
+  },
+  "created_at": "2026-09-01T14:00:00Z",
+  "observed_at": "2026-09-01T13:58:00Z",
+  "location": {
+    "latitude": 36.1625,
+    "longitude": -86.785,
+    "horizontal_accuracy_m": 8.4,
+    "crs": "EPSG:4326",
+    "selection_method": "GPS_ASSISTED",
+    "user_confirmed": true
+  },
+  "notes": "Synthetic field note. Not a flood determination.",
+  "attachments": [],
+  "attestation_authority": "USER",
+  "determination_authority": "NONE",
+  "sync_state": "QUEUED",
+  "evidence_state": "UNASSESSED",
+  "determination_state": "NOT_ISSUED",
+  "operation_id": "OP-TEST-001"
+}

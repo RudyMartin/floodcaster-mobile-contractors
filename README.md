@@ -1,24 +1,29 @@
-# Floodcaster Mobile Contractor Briefing
+# Floodcaster Mobile Client POC
 
-> **PUBLIC BRIEFING SNAPSHOT — ASSESSMENT ONLY**
+> **PUBLIC BRIEFING SNAPSHOT — TEST DATA ONLY**
 >
-> This repository is intentionally public during contractor briefing. It must be made private before implementation begins or before adding contractor work product, credentials, production access details, proprietary backend material, or non-public data.
+> Make this repository private before adding contractor work product, credentials, production endpoints, proprietary backend material, or non-public data.
 
-This repository is the complete starting point for the Floodcaster mobile POC assessment. Start here; do not search other Floodcaster repositories unless specifically instructed.
+Floodcaster is the authoritative flood-decision and evidence platform. The mobile app is one governed client of that platform. This repository tests whether a field user can safely consume an issued Floodcaster determination, work through connectivity loss, create a user-attested field observation, and submit it for server adjudication.
 
-The included application is a sanitized reference snapshot of the existing React/Leaflet SPA from `NextShiftConsulting/floodcaster-web` at commit `8c58b678ff127e884153b7750e9da05a4de83920`. It is evidence of what exists today—not the mandated implementation stack.
+The phone must never manufacture, infer, restyle, or present a field observation as an issued Floodcaster determination.
 
-## First assignment
+The React/Leaflet application at the repository root is a sanitized reference snapshot of `NextShiftConsulting/floodcaster-web` at commit `8c58b678ff127e884153b7750e9da05a4de83920`. It demonstrates existing workflows; it is not the mandated mobile implementation stack.
 
-Assess the reference SPA and return:
+## Start here
 
-1. what can be reused unchanged;
-2. what can be adapted;
-3. what must be rebuilt for the target Svelte PWA;
-4. the recommended first fixed-price POC milestone; and
-5. risks, assumptions, dependencies, and evidence for the estimate.
+1. [CONTRACTOR-BRIEF.md](CONTRACTOR-BRIEF.md) — assignment and required deliverables
+2. [PRODUCT-INVARIANTS.md](PRODUCT-INVARIANTS.md) — disqualifying boundaries
+3. [POC-SCOPE.md](POC-SCOPE.md) — executable milestone scenario
+4. [USER-FLOWS.md](USER-FLOWS.md) — online, offline, reconnect, and supersession flows
+5. [API-BOUNDARY.md](API-BOUNDARY.md) — client-facing service boundary
+6. [contracts/floodcaster-mobile.openapi.yaml](contracts/floodcaster-mobile.openapi.yaml) — draft POC contract
+7. [fixtures/README.md](fixtures/README.md) — synthetic test cases
+8. [mock-server/README.md](mock-server/README.md) — local API simulator
+9. [ASSESSMENT-RESPONSE-TEMPLATE.md](ASSESSMENT-RESPONSE-TEMPLATE.md) — required response format
+10. [FAQ.md](FAQ.md) and [KNOWN-GAPS.md](KNOWN-GAPS.md)
 
-Do not implement product changes during this briefing assessment unless a separate milestone is authorized.
+The existing [infosec review pack](docs/infosec/INFOSEC-FLOW-INDEX.md) remains part of the briefing and is intentionally unchanged by this architecture revision.
 
 ## Run the reference SPA
 
@@ -27,38 +32,24 @@ npm ci
 npm run dev
 ```
 
-The public snapshot defaults to a local API origin. Copy `.env.example` to `.env.local` and set `VITE_API_BASE` only to an approved mock or test endpoint. Do not add production credentials.
+Use only approved mock or test endpoints. The public snapshot defaults to `http://localhost:8787`.
 
-Verification:
+## Run the contract mock
 
 ```bash
-npm test
-npm run typecheck
-npm run build
+node mock-server/server.mjs
 ```
 
-## Read next
+The mock serves only synthetic `TEST_ONLY` fixtures. It is not Floodcaster backend code and is not a production API.
 
-1. [CONTRACTOR-BRIEF.md](CONTRACTOR-BRIEF.md)
-2. [POC-SCOPE.md](POC-SCOPE.md)
-3. [ARCHITECTURE.md](ARCHITECTURE.md)
-4. [API-BOUNDARY.md](API-BOUNDARY.md)
-5. [KNOWN-GAPS.md](KNOWN-GAPS.md)
-6. [FAQ.md](FAQ.md)
-7. [ASSESSMENT-RESPONSE-TEMPLATE.md](ASSESSMENT-RESPONSE-TEMPLATE.md)
-8. [INFOSEC-FLOW-INDEX.md](docs/infosec/INFOSEC-FLOW-INDEX.md) — five security flow diagrams
+## What is fixed and what is open
 
-## Infosec review pack
-
-Five rendered SVG diagrams cover trust boundaries, OAuth/authorization, offline reconciliation, sensitive-data handling, and fail-closed threat paths. Start with [the Infosec flow index](docs/infosec/INFOSEC-FLOW-INDEX.md).
-
-## Non-negotiable boundary
-
-The browser/mobile application calls documented HTTPS/JSON APIs. It does not invoke Rust or Python directly.
-
-- Rust `floodcaster-platform` owns authoritative reconciliation and state mutation.
-- Python is limited to approved build-time, data-preparation, verification, or backend processing.
-- MCP is not a Mobile MVP1 dependency.
-- The contractor must not change backend APIs, canonical contracts, authorization authority, certificate semantics, or production infrastructure during assessment.
+| Fixed | Open for evidence-based recommendation |
+| --- | --- |
+| Floodcaster server is authoritative | React Native/Expo, Capacitor, Flutter, PWA, or another justified client stack |
+| Mobile consumes issued determinations | Degree of reuse from the reference SPA |
+| Mobile creates user-attested observations | Map renderer and durable local-storage implementation |
+| HTTPS/JSON client contract | Packaging and native integration choices |
+| Client never issues a determination | Production estimate after the bounded POC |
 
 No open-source license is granted. See [NOTICE.md](NOTICE.md).

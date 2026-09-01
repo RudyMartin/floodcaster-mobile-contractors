@@ -1,39 +1,52 @@
 # Contractor Brief
 
-## Purpose
+## Assignment
 
-Review the included Floodcaster SPA and determine the most credible path to the Mobile MVP1 proof of concept. This is an assessment milestone, not authorization to implement or redesign the Floodcaster estate.
+Build a bounded, runnable mobile-client POC against the supplied draft contract and synthetic fixtures. You are testing a client of Floodcaster, not rebuilding Floodcaster and not proposing a second source of truth.
 
-## What you have
+Select one implementation path and justify it with measured results. The client framework is not predetermined.
 
-- A runnable React 19 + Vite + Leaflet reference SPA.
-- Its client API wrapper, response types, UI components, tests, and public-safe assets.
-- The target mobile boundary and known gaps.
-- A response template for a comparable fixed-price recommendation.
+## Required milestone deliverable
 
-## What we need from you
+Your fixed-price milestone is complete only when the repository contains:
 
-1. Run and inspect the application.
-2. Produce a component-by-component reuse matrix: REUSE, ADAPT, or REBUILD.
-3. Evaluate a responsive Svelte PWA using MapLibre GL JS.
-4. Define focused feasibility probes for GPS/map performance, camera capture, offline PMTiles in OPFS, IndexedDB journal/sync, secure local handling, and Cognito Authorization Code + PKCE.
-5. Identify the minimum mock/test API surface needed for those probes.
-6. Recommend the first fixed-price milestone with deliverables, acceptance evidence, schedule, assumptions, and exclusions.
+1. runnable source for one iOS/Android-capable client path;
+2. a reproducible build/run procedure on a named device or simulator;
+3. the complete acceptance scenario in [POC-SCOPE.md](POC-SCOPE.md);
+4. automated tests for queue durability, stable operation IDs, and artifact-state rendering;
+5. a short screen recording showing the required scenario and process-kill tests;
+6. measurements for cold start, map interaction, cache size, and reconnect behavior using the supplied fixture scale;
+7. a dependency and license inventory, including paid or trial plugins;
+8. a reuse matrix for the supplied SPA: reuse unchanged, adapt, rebuild, or omit;
+9. a risk register naming platform restrictions and unproven assumptions; and
+10. a fixed-price estimate for the next production stage, separated from this POC.
 
-## Delivery expectations
+A proposal, wireframe, architecture memo, generated scaffold, or happy-path demo alone is not an accepted deliverable.
 
-- Source and documentation through a contractor branch and pull request.
-- Reproducible build/run instructions.
-- A short recorded or live demonstration of the POC.
-- Evidence tied to the agreed browser/device matrix.
-- No unapproved dependency or architecture substitutions.
+## Required implementation behavior
 
-## Stop conditions
+- Render issued determinations only from the server response defined by the contract.
+- Display certificate ID, issuer/engine identity, engine digest/version, issuance time, and verification/status state for an issued determination.
+- Render field observations with explicit user/device provenance, observed time, and sync state.
+- Distinguish observation and determination artifacts by text, iconography, structure, and accessibility semantics; color alone is insufficient.
+- Persist an offline action and its client-generated operation ID before showing a submitted/queued confirmation.
+- Preserve queued work across process termination, device restart where the chosen path supports it, and authentication expiry.
+- Treat GPS as a proposed property match. Require explicit user confirmation and retain horizontal accuracy and CRS.
+- Send observations for server adjudication. Never let the client resolve a domain conflict or issue a determination.
 
-Stop and raise a question before work would require:
+## Outside contractor authority
 
-- a backend, canonical-contract, authorization, certificate, or infrastructure change;
-- production credentials, customer data, internal service keys, or private repositories;
-- inventing an unresolved API or schema;
-- treating the client, PMTiles, GeoPackage, Cognito, or an MCP tool as execution authority;
-- representing a transport/system failure as a domain determination.
+The contractor does not own or change flood analytics, Rust/Python services, RSCT/certificate semantics, canonical production schemas, authorization authority, PostGIS authority, customer data, or production infrastructure.
+
+Questions that require a production contract decision must be recorded as a contract gap. Do not invent backend behavior to make the demo pass.
+
+## Disqualifying findings
+
+- Any locally created object is shown as certified or determination-shaped.
+- The client constructs certified metadata from configuration or display constants.
+- A queued action can disappear after the UI confirms it.
+- Reconnect can apply the same operation twice because the operation ID changes.
+- The client treats itself as authoritative in a conflict.
+- The POC depends on production credentials, production data, or undocumented backend access.
+
+Use [ASSESSMENT-RESPONSE-TEMPLATE.md](ASSESSMENT-RESPONSE-TEMPLATE.md) for the final submission.

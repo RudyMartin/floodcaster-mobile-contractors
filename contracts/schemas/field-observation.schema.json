@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.floodcaster.example.invalid/mobile/v1/field-observation.schema.json",
+  "title": "Field observation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "environment", "schema_version", "artifact_class", "observation_id",
+    "property_id", "created_by", "created_at", "observed_at", "location",
+    "attestation_authority", "determination_authority", "sync_state",
+    "evidence_state", "determination_state", "operation_id"
+  ],
+  "properties": {
+    "environment": { "const": "TEST_ONLY" },
+    "schema_version": { "const": "1.0.0-poc" },
+    "artifact_class": { "const": "FIELD_OBSERVATION" },
+    "observation_id": { "type": "string", "pattern": "^OBS-TEST-[A-Z0-9-]+$" },
+    "property_id": { "type": "string" },
+    "created_by": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["principal_id", "source"],
+      "properties": {
+        "principal_id": { "type": "string" },
+        "source": { "const": "MOBILE_USER" }
+      }
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "observed_at": { "type": "string", "format": "date-time" },
+    "location": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["latitude", "longitude", "horizontal_accuracy_m", "crs", "selection_method", "user_confirmed"],
+      "properties": {
+        "latitude": { "type": "number", "minimum": -90, "maximum": 90 },
+        "longitude": { "type": "number", "minimum": -180, "maximum": 180 },
+        "horizontal_accuracy_m": { "type": "number", "minimum": 0 },
+        "crs": { "const": "EPSG:4326" },
+        "selection_method": { "enum": ["GPS_ASSISTED", "MAP", "MANUAL"] },
+        "user_confirmed": { "type": "boolean" }
+      }
+    },
+    "notes": { "type": "string", "maxLength": 4000 },
+    "attachments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["attachment_id", "media_type", "sha256", "metadata_policy"],
+        "properties": {
+          "attachment_id": { "type": "string" },
+          "media_type": { "type": "string" },
+          "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "metadata_policy": { "enum": ["STRIPPED", "PRESERVED_TEST_ONLY"] }
+        }
+      }
+    },
+    "attestation_authority": { "const": "USER" },
+    "determination_authority": { "const": "NONE" },
+    "sync_state": { "enum": ["DRAFT", "PERSISTED_LOCAL", "QUEUED", "SENDING", "ACKNOWLEDGED", "RETRYABLE_ERROR"] },
+    "evidence_state": { "enum": ["UNASSESSED", "ADMITTED", "REJECTED"] },
+    "determination_state": { "const": "NOT_ISSUED" },
+    "operation_id": { "type": "string", "pattern": "^OP-TEST-[A-Z0-9-]+$" }
+  }
+}

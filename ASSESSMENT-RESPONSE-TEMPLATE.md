@@ -1,33 +1,51 @@
-# Assessment Response Template
+# Contractor Delivery and Assessment
 
-## 1. Executive recommendation
+Complete every section. Link claims to code, tests, recordings, or measured output.
 
-Recommended approach, why, and the smallest useful first milestone.
+## 1. Implemented path
 
-## 2. Reuse matrix
+- Framework/version:
+- Map renderer/version:
+- Local durable store:
+- Tested devices and OS versions:
+- Reproducible run/build commands:
 
-| Existing item | REUSE / ADAPT / REBUILD | Target location | Reason | Evidence |
-|---|---|---|---|---|
+## 2. Acceptance evidence
 
-## 3. Feasibility probes
+| Required scenario | Evidence link | Pass/fail | Limitation |
+| --- | --- | --- | --- |
+| Issued determination provenance | | | |
+| Observation/determination side by side | | | |
+| Offline durable queue | | | |
+| Process-kill timing tests | | | |
+| Auth expiry without data loss | | | |
+| Stable-ID replay | | | |
+| Rejection/verify-required rendering | | | |
+| Superseded cached determination | | | |
+| Background/foreground map recovery | | | |
+| Baseline and 3× map load | | | |
 
-| Probe | Implementation sketch | Acceptance evidence | Device/browser | Estimate |
-|---|---|---|---|---|
+## 3. Measurements
 
-Cover responsive UI, GPS/map performance, camera, OPFS PMTiles, IndexedDB journal/sync, secure local handling, Cognito PKCE, and typed API mocks.
+Report device, OS, build mode, data size, method, median, worst observed value, and failure point for cold start, map interaction, cache/pin, offline reopen, and reconnect processing.
 
-## 4. Proposed architecture
+## 4. SPA reuse matrix
 
-Show client components, local storage, identity, mock/test API, and the server authority boundary. Keep Rust/Python details behind HTTPS interfaces and exclude MCP.
+| Existing area | Reuse unchanged | Adapt | Rebuild | Omit | Evidence/reason |
+| --- | --- | --- | --- | --- | --- |
 
-## 5. Risks and questions
+## 5. Dependencies and licenses
 
-Separate confirmed gaps, assumptions, unanswered contract questions, and external dependencies.
+List every direct dependency/plugin, version, license, paid/trial status, native maintenance owner, and offline-map restrictions.
 
-## 6. Fixed-price milestone
+## 6. Risks and contract gaps
 
-State scope, deliverables, acceptance tests, schedule, price, assumptions, exclusions, and required Floodcaster inputs.
+Separate measured failures, platform constraints, assumptions, and decisions required from Floodcaster.
 
-## 7. Evidence
+## 7. Recommendation
 
-Provide the branch/PR, build/test commands and results, screenshots, browser/device matrix, and demo link or recording.
+State whether this path should proceed, the evidence supporting that decision, and the smallest next private integration milestone.
+
+## 8. Next-stage fixed price
+
+Separate scope, deliverables, exclusions, calendar estimate, labor estimate, and fixed price. Do not roll production release into the POC price.

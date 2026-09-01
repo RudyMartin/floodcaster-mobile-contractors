@@ -1,0 +1,18 @@
+{
+  "environment": "TEST_ONLY",
+  "contract_status": "POC_CONTRACT_DRAFT",
+  "property_id": "PROP-TEST-001",
+  "determination_id": "DET-TEST-001",
+  "certificate_id": "CERT-TEST-001",
+  "map_pack": {
+    "environment": "TEST_ONLY",
+    "pack_id": "PACK-TEST-001",
+    "aoi_id": "AOI-TEST-001",
+    "content_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "size_bytes": 0,
+    "data_license": "NO_BINARY_INCLUDED_TEST_HANDOFF_ONLY",
+    "download_uri": "https://example.invalid/floodcaster/test-pack.pmtiles",
+    "authoritative": false,
+    "purpose": "PRESENTATION"
+  }
+}

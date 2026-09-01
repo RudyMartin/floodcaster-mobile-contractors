@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.floodcaster.example.invalid/mobile/v1/certificate.schema.json",
+  "title": "Certificate envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["environment", "certificate_id", "determination_id", "issuer", "engine_digest", "issued_at", "artifact_digest", "signature"],
+  "properties": {
+    "environment": { "const": "TEST_ONLY" },
+    "certificate_id": { "type": "string" },
+    "determination_id": { "type": "string" },
+    "issuer": { "type": "string" },
+    "engine_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "issued_at": { "type": "string", "format": "date-time" },
+    "artifact_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "key_id", "value"],
+      "properties": {
+        "algorithm": { "const": "TEST_ONLY-Ed25519" },
+        "key_id": { "type": "string" },
+        "value": { "type": "string" }
+      }
+    }
+  }
+}

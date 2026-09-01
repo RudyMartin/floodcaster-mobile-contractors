@@ -23,3 +23,5 @@ jobs:
       - run: npm test
       - run: npm run typecheck
       - run: npm run build
+      - run: node --check mock-server/server.mjs
+      - run: node scripts/validate-briefing.mjs

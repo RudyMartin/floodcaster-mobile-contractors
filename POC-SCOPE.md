@@ -1,50 +1,38 @@
-# POC Scope
+# Mobile POC Scope
 
-## Assessment question
+## Milestone question
 
-How much of the existing browser SPA can support a mobile-first Floodcaster field workflow, and what must be rebuilt to prove the governed offline reconciliation path?
+Can the selected client approach safely support Floodcaster's field workflow and authority boundary on iOS and Android, with enough evidence to estimate a production implementation?
 
-## Target POC
+## Required acceptance scenario
 
-- One responsive Svelte PWA for phone, tablet, and desktop.
-- One Bologna area of interest.
-- MapLibre GL JS with one immutable PMTiles delivery pack.
-- Offline PMTiles stored in OPFS.
-- IndexedDB operation journal.
-- One offline-recorded operation: FIELD_REVIEWED.
-- Amazon Cognito User Pool using Authorization Code + PKCE.
-- Floodcaster-issued offline authority.
-- Server-side Rust reconciliation through documented HTTPS APIs.
-- Outcomes: APPLIED, VERIFY_REQUIRED, or REJECTED.
+The POC must demonstrate all of the following against the supplied mock contract:
 
-## Required feasibility probes
+1. Search/select the synthetic property and render its server-derived geometry.
+2. Retrieve an issued determination and show certificate ID, issuer/engine, digest/version, issuance time, and status.
+3. Pin the supplied test area for offline presentation.
+4. Go offline and create a field observation containing a note, GPS coordinates, horizontal accuracy, property confirmation, and optional test photo metadata.
+5. Show the observation beside the issued determination with unmistakably different artifact labels and structure.
+6. Terminate the app process immediately after submit at several timing points; queued work and the same operation ID survive.
+7. Let authentication expire while offline; queued work remains locally present and cannot be sent until re-authentication.
+8. Reconnect and submit. Render transport state separately from the server domain outcome.
+9. Retry the same operation and demonstrate idempotent replay rather than duplicate application.
+10. Refresh a cached determination after the mock reports it superseded; the prior result is no longer presented as current.
+11. Background/foreground repeatedly and demonstrate map recovery.
 
-| Probe | Evidence expected |
-|---|---|
-| Responsive field UI | Phone, tablet, and desktop captures from one codebase |
-| GPS and map | Accuracy/error states plus representative pan/zoom performance |
-| Camera | Capture/attach flow with permission denial and cancellation handling |
-| Offline map | Download, raw-byte digest verification, OPFS availability, reopen offline |
-| Offline journal | Record, retry without mutation, reconnect, replay/collision behavior via mocks |
-| Secure handling | Threat analysis for tokens, offline authority, local data, and logout/revocation |
-| API boundary | Typed client and mock contract; no direct Rust/Python/MCP invocation |
+## Performance probe
 
-## Assessment deliverables
+Use a representative synthetic layer at the supplied baseline scale, then repeat at three times the feature count. Report the device, OS, renderer, feature count, interaction frame-rate or latency method, memory behavior, and failure point. Do not report “smooth” without measurements.
 
-1. Reuse/adapt/rebuild matrix.
-2. Proposed POC architecture.
-3. Technical spike plan and acceptance tests.
-4. Device/browser test matrix.
-5. Risks and unresolved decisions.
-6. Fixed-price milestone proposal.
+## Out of scope
 
-## Excluded from this phase
+- flood-model execution on device;
+- local determination issuance;
+- changes to Rust/Python services or certificate semantics;
+- production authentication, customer data, production endpoints, or App Store submission;
+- a complete offline basemap region (the repository supplies only a handoff format, not licensed production map content);
+- final production framework selection without measured POC evidence.
 
-- Product implementation.
-- Native iOS/Android, React Native, or Expo.
-- Backend or database changes.
-- Production deployment or credentials.
-- Canonical schema, signature, certificate, receipt, or policy changes.
-- MCP dependency.
-- Generic synchronization platform.
-- Fabricated RSCT R/S/N/kappa values.
+## Acceptance
+
+Floodcaster accepts the milestone after the required code, tests, recording, measurements, dependency/license inventory, and completed response template are delivered and reproducible. Missing platform limitations must be stated; hidden substitutions are not acceptable.

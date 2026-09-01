@@ -1,33 +1,44 @@
-# Architecture Boundary
+# Architecture
 
-## Two states must not be confused
+Floodcaster is the product authority. Mobile is one client experience.
 
-| Layer | Existing reference snapshot | Mobile MVP1 target |
-|---|---|---|
-| UI | React 19 SPA | Responsive Svelte PWA |
-| Map | Leaflet | MapLibre GL JS |
-| Online client | Existing Floodcaster HTTP wrapper | Typed /mobile/v1 client |
-| Offline map | Not implemented | Immutable PMTiles in OPFS |
-| Offline work | Not implemented | IndexedDB operation journal |
-| Identity | Stored API-key patterns in reference code | Cognito User Pool, Authorization Code + PKCE, access token |
-| Domain authority | Backend services | Rust floodcaster-platform reconciliation boundary |
-| Authoritative state | Backend-owned | Aurora/PostGIS |
-| MCP | Not needed for the SPA | Explicitly not a Mobile MVP1 dependency |
+```mermaid
+flowchart TB
+    subgraph P["Floodcaster platform"]
+        D["Authoritative data"] --> E["Flood analytics and Rust decision services"]
+        E --> C["RSCT certification and registry"]
+        C --> G["Governed domain boundary"]
+    end
+    G --> A["HTTPS API"]
+    G --> M["MCP"]
+    A --> W["Web and mobile clients"]
+    M --> X["Agents"]
+```
 
-## Runtime boundary
+## Artifact lifecycle
 
-The mobile/browser client records claims and submits them. It does not make an authoritative determination and it never mutates authoritative spatial state directly.
+```mermaid
+stateDiagram-v2
+    [*] --> LocalObservation: User records evidence
+    LocalObservation --> Queued: Durable local write
+    Queued --> Submitted: HTTPS operation
+    Submitted --> Admitted: Server adjudication
+    Submitted --> Rejected: Server adjudication
+    Submitted --> VerifyRequired: Server adjudication
+    Admitted --> IssuedDetermination: Engine command and certification
+```
 
-Rust owns verification of identity mapping, delegated authority, integrity, policy, area membership, revision, replay/idempotency, certificate issuance, receipt persistence, and the authoritative PostGIS transaction.
+`IssuedDetermination` is not a client transition. It is a server-owned outcome returned as a distinct artifact.
 
-Python may remain behind the backend boundary or in governed build/data tooling. Language choice is invisible to the client because the client consumes HTTPS/JSON contracts.
+## Repository roles
 
-## Authority distinctions
+| Area | Role |
+| --- | --- |
+| Root React/Leaflet SPA | Existing client reference and reuse evidence |
+| `contracts/` | Draft client-facing POC interface |
+| `fixtures/` | Synthetic scenarios for comparable tests |
+| `mock-server/` | Local simulator for the draft contract |
+| `map-pack/` | Test-only offline-pack handoff format |
+| `docs/infosec/` | Existing security review pack; unchanged |
 
-- Cognito answers who authenticated.
-- Floodcaster answers what the principal may do.
-- Signed offline authority delegates bounded offline scope.
-- PMTiles proves presentation provenance, never authorization.
-- The browser records FIELD_REVIEWED; it cannot set APPLIED.
-- APPLIED, VERIFY_REQUIRED, and REJECTED are domain outcomes.
-- Transport, database, cryptographic service, and program failures surface separately as system errors.
+Framework selection is downstream of these boundaries. A contractor may recommend Capacitor, React Native, Flutter, a PWA, or another approach, but the recommendation must satisfy the same contract and acceptance tests.

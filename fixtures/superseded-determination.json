@@ -1,0 +1,28 @@
+{
+  "environment": "TEST_ONLY",
+  "schema_version": "1.0.0-poc",
+  "artifact_class": "ISSUED_DETERMINATION",
+  "determination_id": "DET-TEST-001",
+  "property_id": "PROP-TEST-001",
+  "result": {
+    "classification": "SYNTHETIC_TEST_CLASSIFICATION",
+    "summary": "Synthetic superseded result for client rendering tests only.",
+    "source_revision": "DATASET-TEST-2026-01"
+  },
+  "certificate_id": "CERT-TEST-001",
+  "issuer": "Floodcaster Test Authority",
+  "engine": {
+    "identity": "floodcaster-test-engine",
+    "version": "0.0.0-test",
+    "digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "issued_at": "2026-09-01T13:14:00Z",
+  "artifact_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+  "determination_authority": "FLOODCASTER",
+  "determination_state": "ISSUED",
+  "verification": {
+    "status": "SUPERSEDED",
+    "verified_at": "2026-09-02T09:00:00Z",
+    "superseded_by": "DET-TEST-002"
+  }
+}

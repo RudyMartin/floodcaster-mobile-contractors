@@ -1,0 +1,13 @@
+{
+  "environment": "TEST_ONLY",
+  "operation_id": "OP-TEST-001",
+  "transport_state": "ACKNOWLEDGED",
+  "replay": false,
+  "domain_outcome": "VERIFY_REQUIRED",
+  "evidence_state": "UNASSESSED",
+  "determination_state": "NOT_ISSUED",
+  "acknowledged_at": "2026-09-01T14:05:00Z",
+  "determination_id": null,
+  "certificate_id": null,
+  "error": null
+}
