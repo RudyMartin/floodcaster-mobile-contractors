@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="640" viewBox="0 0 360 640" font-family="monospace" font-size="12">
+  <defs>
+    <pattern id="hatch" width="8" height="8" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#999" stroke-width="2"/>
+    </pattern>
+  </defs>
+  <rect x="1" y="1" width="358" height="638" fill="#fff" stroke="#222" stroke-width="2" stroke-dasharray="8 4"/>
+  <rect x="1" y="1" width="358" height="64" fill="url(#hatch)" stroke="#222"/>
+  <rect x="30" y="8" width="300" height="48" fill="#fff" stroke="#222"/>
+  <text x="180" y="28" text-anchor="middle" font-weight="bold" font-size="11">FIELD OBSERVATION</text>
+  <text x="180" y="46" text-anchor="middle" font-size="10">NOT A FLOODCASTER DETERMINATION</text>
+  <text x="24" y="88">[notebook/camera icon]  hatched / editable</text>
+  <g stroke="#222" fill="none"><rect x="16" y="100" width="328" height="190" stroke-dasharray="6 3"/></g>
+  <text x="24" y="120">Observation ID: &lt;client&gt;</text>
+  <text x="24" y="140">Operation ID: &lt;stable, client-generated&gt;</text>
+  <text x="24" y="160">Provenance: &lt;user&gt; on &lt;device&gt;</text>
+  <text x="24" y="180">Observed: &lt;device time&gt;</text>
+  <text x="24" y="200">GPS: &lt;lat, lon&gt; ± &lt;horizontal accuracy m&gt;</text>
+  <text x="24" y="220">Property: PROP-TEST-001 (user-confirmed)</text>
+  <text x="24" y="240">Note: &lt;editable until submitted&gt;</text>
+  <text x="24" y="260">Photo metadata: &lt;optional, test only&gt;</text>
+  <rect x="16" y="306" width="328" height="30" fill="#e8e8e8" stroke="#222"/>
+  <text x="24" y="326">Sync: QUEUED OFFLINE · Evidence: UNASSESSED</text>
+  <rect x="16" y="352" width="100" height="40" fill="#ddd" stroke="#222"/>
+  <text x="66" y="376" text-anchor="middle">Edit</text>
+  <rect x="130" y="352" width="100" height="40" fill="#ddd" stroke="#222"/>
+  <text x="180" y="376" text-anchor="middle">Discard…</text>
+  <rect x="244" y="352" width="100" height="40" fill="#f4f4f4" stroke="#999" stroke-dasharray="4 3"/>
+  <text x="294" y="370" text-anchor="middle" fill="#999">Submit</text>
+  <text x="294" y="384" text-anchor="middle" fill="#999" font-size="9">(offline)</text>
+  <text x="24" y="430" fill="#777" font-size="10">Submit is visible but disabled offline/unauthenticated,</text>
+  <text x="24" y="446" fill="#777" font-size="10">with the reason shown. QUEUED OFFLINE appears only</text>
+  <text x="24" y="462" fill="#777" font-size="10">after durable local persistence. No determination-like</text>
+  <text x="24" y="478" fill="#777" font-size="10">status appears anywhere on this screen.</text>
+</svg>

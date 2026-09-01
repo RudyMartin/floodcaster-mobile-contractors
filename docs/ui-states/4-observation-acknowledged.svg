@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="640" viewBox="0 0 360 640" font-family="monospace" font-size="12">
+  <defs>
+    <pattern id="hatch4" width="8" height="8" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#999" stroke-width="2"/>
+    </pattern>
+  </defs>
+  <rect x="1" y="1" width="358" height="638" fill="#fff" stroke="#222" stroke-width="2" stroke-dasharray="8 4"/>
+  <rect x="1" y="1" width="358" height="64" fill="url(#hatch4)" stroke="#222"/>
+  <rect x="30" y="8" width="300" height="48" fill="#fff" stroke="#222"/>
+  <text x="180" y="28" text-anchor="middle" font-weight="bold" font-size="11">FIELD OBSERVATION</text>
+  <text x="180" y="46" text-anchor="middle" font-size="10">NOT A FLOODCASTER DETERMINATION</text>
+  <g stroke="#222" fill="none"><rect x="16" y="80" width="328" height="110" stroke-dasharray="6 3"/></g>
+  <text x="24" y="100">Observation ID: &lt;client&gt;</text>
+  <text x="24" y="120">Operation ID: &lt;unchanged from queue&gt;</text>
+  <text x="24" y="140">Provenance: &lt;user&gt; on &lt;device&gt;</text>
+  <text x="24" y="160">Observed: &lt;device time&gt;</text>
+  <text x="24" y="180">Read-only after submission</text>
+  <rect x="16" y="206" width="328" height="30" fill="#e8e8e8" stroke="#222"/>
+  <text x="24" y="226">Transport: ACKNOWLEDGED at &lt;time&gt;</text>
+  <rect x="16" y="248" width="328" height="56" fill="#fff" stroke="#222" stroke-width="2"/>
+  <text x="24" y="268" font-weight="bold">Server outcome: &lt;APPLIED | VERIFY_REQUIRED |</text>
+  <text x="24" y="286" font-weight="bold">REJECTED | pending adjudication&gt;</text>
+  <text x="24" y="330" fill="#777" font-size="10">Acknowledged = server RECEIVED the operation.</text>
+  <text x="24" y="346" fill="#777" font-size="10">It is never rendered as admitted or determined.</text>
+  <text x="24" y="362" fill="#777" font-size="10">The outcome row shows exactly what the server</text>
+  <text x="24" y="378" fill="#777" font-size="10">returned; the client never infers it.</text>
+  <rect x="16" y="404" width="156" height="40" fill="#ddd" stroke="#222"/>
+  <text x="94" y="428" text-anchor="middle">Refresh outcome</text>
+  <rect x="188" y="404" width="156" height="40" fill="#ddd" stroke="#222"/>
+  <text x="266" y="428" text-anchor="middle">Response detail</text>
+  <text x="24" y="480" fill="#777" font-size="10">No edit control (read-only). No "resubmit as new" —</text>
+  <text x="24" y="496" fill="#777" font-size="10">a replay must reuse the original operation ID.</text>
+</svg>

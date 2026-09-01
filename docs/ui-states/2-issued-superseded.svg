@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="640" viewBox="0 0 360 640" font-family="monospace" font-size="12">
+  <rect x="1" y="1" width="358" height="638" fill="#fff" stroke="#222" stroke-width="2"/>
+  <rect x="1" y="1" width="358" height="52" fill="#555"/>
+  <text x="180" y="24" fill="#fff" text-anchor="middle" font-weight="bold">CERTIFIED DETERMINATION</text>
+  <text x="180" y="42" fill="#fff" text-anchor="middle" font-size="10">[certificate icon]  demoted presentation</text>
+  <rect x="16" y="68" width="328" height="44" fill="#fff" stroke="#222" stroke-width="2" stroke-dasharray="6 3"/>
+  <text x="24" y="86" font-weight="bold">Status: SUPERSEDED — NOT CURRENT</text>
+  <text x="24" y="102">last verified &lt;time&gt;</text>
+  <g fill="#888">
+    <text x="24" y="140">Certificate ID: &lt;from API&gt;</text>
+    <text x="24" y="160">Issuer: &lt;from API&gt; · Engine digest: &lt;from API&gt;</text>
+    <text x="24" y="180">Issued: &lt;issuance time&gt;</text>
+    <text x="24" y="200">Determination: &lt;value, visually subordinate&gt;</text>
+  </g>
+  <rect x="16" y="222" width="328" height="60" fill="#eee" stroke="#222"/>
+  <text x="24" y="244">Replacement: &lt;shown ONLY if server returned</text>
+  <text x="24" y="262">a distinct issued artifact — link to open it&gt;</text>
+  <rect x="16" y="300" width="156" height="40" fill="#ddd" stroke="#222"/>
+  <text x="94" y="324" text-anchor="middle">Refresh status</text>
+  <rect x="188" y="300" width="156" height="40" fill="#ddd" stroke="#222"/>
+  <text x="266" y="324" text-anchor="middle">Open replacement</text>
+  <text x="24" y="380" fill="#777" font-size="10">UNKNOWN / REVOKED render the same demotion pattern.</text>
+  <text x="24" y="396" fill="#777" font-size="10">Stale value is never styled as current; no client "restore".</text>
+  <text x="24" y="412" fill="#777" font-size="10">Offline: cached artifact shows last-known status + time.</text>
+</svg>
