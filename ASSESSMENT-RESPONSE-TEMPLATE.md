@@ -28,9 +28,9 @@ Complete every section. Link claims to code, tests, recordings, or measured outp
 ## 2a. Automated tests (deliverable 4)
 
 - Exact command to run the tests:
-- What they cover — one line each for: queue durability, stable operation IDs, artifact-state rendering:
-- Paste the final line of the test output (counts of pass/fail):
-- Screen recording file/link (deliverable 5) and which scenario minutes cover the process-kill tests:
+- What they cover — one line each for: (a) a saved observation survives the app being killed; (b) the operation ID never changes across retries; (c) determinations and observations are displayed clearly differently:
+- Paste the final line of the test output (pass/fail counts):
+- Screen recording file/link (deliverable 5), and at which minutes the app-kill tests appear:
 
 ## 3. Measurements
 
