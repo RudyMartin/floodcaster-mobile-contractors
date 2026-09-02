@@ -1,26 +1,39 @@
 openapi: 3.1.0
 info:
-  title: Floodcaster Mobile POC API
-  version: 0.2.0-draft
-  description: >-
-    POC_CONTRACT_DRAFT. Synthetic public evaluation surface only. This contract
-    is not a production endpoint commitment and exposes no Floodcaster internals.
+  title: Floodcaster Unified Mobile Hazard API
+  version: 0.5.0-proposed
+  description: PROPOSED single mobile-facing contract for property context, certified
+    flood determinations, field observations, and location-relative hazards. Flood,
+    severe weather, tropical cyclone, wildfire, coastal, and winter-weather records
+    use one nearby-hazards operation and one common authority/provenance envelope.
+    Hazard-family details remain typed and source-attributed; an official alert, a
+    source observation, a forecast, a historical record, a Floodcaster analysis, and
+    a user field observation are never interchangeable. Existing non-live contractor
+    operations and /mobile/v1 paths remain stable. A route appearing here does not
+    assert that it is deployed.
+  x-status: PROPOSED
 servers:
-  - url: http://localhost:8787
-    description: TEST_ONLY local mock
+- url: https://api.floodcaster.com
+  description: Production gateway; only deployed operations are callable
+- url: https://sandbox-api.floodcaster.com
+  description: Contractor sandbox placeholder
+- url: http://localhost:8787
+  description: TEST_ONLY local mock
 tags:
-  - name: Read models
-  - name: Operations
-  - name: Session
+- name: Read models
+- name: Operations
+- name: Session
+- name: Hazards
+  description: NOAA-backed operational, forecast, and historical hazard context
 paths:
   /mobile/v1/session:
     post:
-      tags: [Session]
+      tags:
+      - Session
       summary: Obtain a TEST_ONLY session token
-      description: >-
-        Simulates authentication for the POC. The mock enforces expiry so
-        clients can prove queued work survives an expired session; the
-        X-Floodcaster-Mock-Session-State header forces expiry deterministically.
+      description: Simulates authentication for the POC. The mock enforces expiry
+        so clients can prove queued work survives an expired session; the X-Floodcaster-Mock-Session-State
+        header forces expiry deterministically.
       responses:
         '201':
           description: Session token with explicit expiry
@@ -28,9 +41,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Session'
+      operationId: createMobileSession
   /mobile/v1/bootstrap:
     get:
-      tags: [Read models]
+      tags:
+      - Read models
       summary: Load the synthetic POC entry point
       responses:
         '200':
@@ -39,16 +54,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Bootstrap'
+      operationId: getMobileBootstrap
   /mobile/v1/properties:
     get:
-      tags: [Read models]
+      tags:
+      - Read models
       summary: Search the test corpus properties
       parameters:
-        - name: query
-          in: query
-          required: false
-          schema: { type: string }
-          description: Case-insensitive substring over property_id and display_address
+      - name: query
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Case-insensitive substring over property_id and display_address
       responses:
         '200':
           description: Up to 20 matches
@@ -56,61 +74,74 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PropertySearchResult'
+      operationId: searchMobileProperties
   /mobile/v1/layers:
     get:
-      tags: [Read models]
+      tags:
+      - Read models
       summary: List the corpus flood presentation layers with pinned digests
       responses:
         '200':
-          description: Layer index (feature counts, sizes, sha256) from the corpus manifest
+          description: Layer index (feature counts, sizes, sha256) from the corpus
+            manifest
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/LayerIndex'
+      operationId: listMobileLayers
   /mobile/v1/layers/{layer_name}:
     get:
-      tags: [Read models]
+      tags:
+      - Read models
       summary: Stream one corpus flood layer as GeoJSON
-      description: >-
-        Presentation/test data only; layer content is never authorization or an
-        authoritative area-of-interest boundary. Bytes match the sha256 pinned
+      description: Presentation/test data only; layer content is never authorization
+        or an authoritative area-of-interest boundary. Bytes match the sha256 pinned
         in the layer index. flood-stress-3x is the performance probe input.
       parameters:
-        - name: layer_name
-          in: path
-          required: true
-          schema:
-            type: string
-            enum: [flood-normal, flood-complex, flood-stress-3x]
+      - name: layer_name
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - flood-normal
+          - flood-complex
+          - flood-stress-3x
       responses:
         '200':
           description: GeoJSON FeatureCollection (WGS 84)
           content:
             application/geo+json:
-              schema: { type: object }
+              schema:
+                type: object
         '404':
           $ref: '#/components/responses/NotFound'
+      operationId: getMobileLayer
   /mobile/v1/map-pack:
     get:
-      tags: [Read models]
+      tags:
+      - Read models
       summary: Download the offline map pack binary
-      description: >-
-        PMTiles archive for the corpus test area. The client verifies the
-        downloaded bytes against content_sha256 from the bootstrap map_pack
-        manifest before marking the pack available offline. Presentation data
-        only; pack membership is never authorization.
+      description: PMTiles archive for the corpus test area. The client verifies the
+        downloaded bytes against content_sha256 from the bootstrap map_pack manifest
+        before marking the pack available offline. Presentation data only; pack membership
+        is never authorization.
       responses:
         '200':
           description: PMTiles binary
           content:
             application/octet-stream:
-              schema: { type: string, format: binary }
+              schema:
+                type: string
+                format: binary
+      operationId: getMobileMapPack
   /mobile/v1/properties/{property_id}:
     get:
-      tags: [Read models]
+      tags:
+      - Read models
       summary: Get a server-owned property read model
       parameters:
-        - $ref: '#/components/parameters/PropertyId'
+      - $ref: '#/components/parameters/PropertyId'
       responses:
         '200':
           description: Property read model
@@ -120,66 +151,79 @@ paths:
                 $ref: '#/components/schemas/PropertyReadModel'
         '404':
           $ref: '#/components/responses/NotFound'
+      operationId: getMobileProperty
   /mobile/v1/determinations/{determination_id}:
     get:
-      tags: [Read models]
+      tags:
+      - Read models
       summary: Get a persisted engine-issued determination
       parameters:
-        - name: determination_id
-          in: path
-          required: true
-          schema: { type: string }
+      - name: determination_id
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         '200':
           description: Issued determination
           content:
             application/json:
               schema:
-                $ref: './schemas/issued-determination.schema.json'
+                $ref: '#/components/schemas/IssuedDetermination'
         '404':
           $ref: '#/components/responses/NotFound'
+      operationId: getMobileDetermination
   /mobile/v1/certificates/{certificate_id}:
     get:
-      tags: [Read models]
+      tags:
+      - Read models
       summary: Get the certificate attached to an issued determination
       parameters:
-        - name: certificate_id
-          in: path
-          required: true
-          schema: { type: string }
+      - name: certificate_id
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         '200':
           description: Certificate envelope
           content:
             application/json:
               schema:
-                $ref: './schemas/certificate.schema.json'
+                $ref: '#/components/schemas/Certificate'
         '404':
           $ref: '#/components/responses/NotFound'
+      operationId: getMobileCertificate
   /mobile/v1/operations:
     post:
-      tags: [Operations]
+      tags:
+      - Operations
       summary: Submit one durable client operation for server adjudication
-      description: >-
-        Requires a valid session token. X-Floodcaster-Mock-Scenario is accepted
-        only by the TEST_ONLY mock and selects applied, verify-required,
-        rejected, replay, or collision. X-Floodcaster-Mock-Session-State:
-        expired forces an expired-session response regardless of token age.
+      description: 'Requires a valid session token. X-Floodcaster-Mock-Scenario is
+        accepted only by the TEST_ONLY mock and selects applied, verify-required,
+        rejected, replay, or collision. X-Floodcaster-Mock-Session-State: expired
+        forces an expired-session response regardless of token age.'
       security:
-        - sessionToken: []
+      - sessionToken: []
       parameters:
-        - name: X-Floodcaster-Mock-Session-State
-          in: header
-          required: false
-          schema:
-            type: string
-            enum: [expired]
-        - name: X-Floodcaster-Mock-Scenario
-          in: header
-          required: false
-          schema:
-            type: string
-            enum: [applied, verify-required, rejected, replay, collision]
+      - name: X-Floodcaster-Mock-Session-State
+        in: header
+        required: false
+        schema:
+          type: string
+          enum:
+          - expired
+      - name: X-Floodcaster-Mock-Scenario
+        in: header
+        required: false
+        schema:
+          type: string
+          enum:
+          - applied
+          - verify-required
+          - rejected
+          - replay
+          - collision
       requestBody:
         required: true
         content:
@@ -192,28 +236,62 @@ paths:
           content:
             application/json:
               schema:
-                $ref: './schemas/operation-result.schema.json'
+                $ref: '#/components/schemas/OperationResult'
         '401':
-          description: >-
-            Transport-layer authentication failure (AUTH_REQUIRED or
-            AUTH_EXPIRED). Not a domain outcome; queued client work must
-            survive it unchanged.
+          description: Transport-layer authentication failure (AUTH_REQUIRED or AUTH_EXPIRED).
+            Not a domain outcome; queued client work must survive it unchanged.
           content:
             application/json:
               schema:
                 type: object
-                required: [environment, error]
+                required:
+                - environment
+                - error
                 properties:
-                  environment: { const: TEST_ONLY }
+                  environment:
+                    const: TEST_ONLY
                   error:
                     type: string
-                    enum: [AUTH_REQUIRED, AUTH_EXPIRED]
+                    enum:
+                    - AUTH_REQUIRED
+                    - AUTH_EXPIRED
         '409':
           description: Stable operation ID was reused with a different payload
           content:
             application/json:
               schema:
-                $ref: './schemas/operation-result.schema.json'
+                $ref: '#/components/schemas/OperationResult'
+      operationId: submitMobileOperation
+  /mobile/v1/hazards/nearby:
+    get:
+      operationId: getNearbyHazards
+      tags:
+      - Hazards
+      summary: Get all supported hazards near a location
+      description: Single bounded location query for flood, severe weather, tropical
+        cyclone, wildfire, coastal, winter-weather, and other source-attributed hazards.
+        TEST_ONLY fixtures and live sources return the same schema. Incomplete or
+        unavailable sources are reported explicitly in provenance and are never treated
+        as an evaluated absence.
+      security:
+      - sessionToken: []
+      parameters:
+      - $ref: '#/components/parameters/Latitude'
+      - $ref: '#/components/parameters/Longitude'
+      - $ref: '#/components/parameters/RadiusKm'
+      - $ref: '#/components/parameters/HazardFamilies'
+      - $ref: '#/components/parameters/TimeScopes'
+      responses:
+        '200':
+          $ref: '#/components/responses/NearbyHazardsSuccess'
+        '400':
+          $ref: '#/components/responses/InvalidHazardQuery'
+        '401':
+          $ref: '#/components/responses/HazardAuthFailure'
+        '503':
+          $ref: '#/components/responses/HazardSourceUnavailable'
+      x-implementation-status: NOT_IMPLEMENTED
+      x-shared-use-case: NearbyHazards
 components:
   securitySchemes:
     sessionToken:
@@ -225,7 +303,69 @@ components:
       name: property_id
       in: path
       required: true
-      schema: { type: string }
+      schema:
+        type: string
+    Latitude:
+      name: lat
+      in: query
+      required: true
+      description: Latitude in WGS 84 decimal degrees
+      schema:
+        type: number
+        minimum: -90
+        maximum: 90
+      example: 43.0731
+    Longitude:
+      name: lon
+      in: query
+      required: true
+      description: Longitude in WGS 84 decimal degrees
+      schema:
+        type: number
+        minimum: -180
+        maximum: 180
+      example: -89.4012
+    RadiusKm:
+      name: radius_km
+      in: query
+      required: false
+      description: Bounded radial search distance in kilometers
+      schema:
+        type: number
+        exclusiveMinimum: 0
+        maximum: 100
+        default: 10
+      example: 10
+    HazardFamilies:
+      name: hazard_family
+      in: query
+      required: false
+      description: Optional repeated filter. Omit to request every supported hazard
+        family.
+      style: form
+      explode: true
+      schema:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/components/schemas/HazardFamily'
+    TimeScopes:
+      name: time_scope
+      in: query
+      required: false
+      description: Optional repeated filter. Omit to request active, forecast, and
+        recent historical records.
+      style: form
+      explode: true
+      schema:
+        type: array
+        uniqueItems: true
+        items:
+          type: string
+          enum:
+          - ACTIVE
+          - FORECAST
+          - RECENT_HISTORY
   responses:
     NotFound:
       description: Synthetic object not found
@@ -233,104 +373,2340 @@ components:
         application/json:
           schema:
             type: object
-            required: [environment, error]
+            required:
+            - environment
+            - error
             properties:
-              environment: { const: TEST_ONLY }
-              error: { const: NOT_FOUND }
+              environment:
+                const: TEST_ONLY
+              error:
+                const: NOT_FOUND
+    NearbyHazardsSuccess:
+      description: Nearby hazards and Golden GeoData context
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NearbyHazardsResponse'
+          examples:
+            referenceNotReady:
+              summary: Golden GeoData not activated — nothing is asserted
+              description: 'Unchanged 0.3.0 behaviour, now explicit about the panel:
+                firm_map.evaluation is NOT_EVALUATED, and every panel field is null
+                rather than absent or zero.'
+              value:
+                schema_version: hazard-nearby/2.0.0
+                environment: TEST_ONLY
+                generated_at: '2026-09-02T14:13:27Z'
+                location:
+                  lat: 43.0731
+                  lon: -89.4012
+                radius_km: 10
+                reference_data:
+                  status: NOT_READY
+                  reason_code: REFERENCE_RELEASE_NOT_ACTIVE
+                  releases: []
+                  property: null
+                  flood_zone: null
+                  firm_map:
+                    evaluation: NOT_EVALUATED
+                    firm_panel_id: null
+                    dfirm_id: null
+                    panel_number: null
+                    suffix: null
+                    panel_type: null
+                    effective_date: null
+                    preliminary_date: null
+                    age_days: null
+                    regulatory_status: UNKNOWN
+                    source_citation: null
+                    lomr:
+                      evaluation: NOT_EVALUATED
+                      intersecting_count: null
+                      latest_effective_date: null
+                      revises_effective_panel: null
+                      case_numbers: []
+                    currency_assessment:
+                      classification: NOT_ASSESSED
+                      as_of: '2026-09-02'
+                      policy_id: firm-currency/v1
+                      derived: true
+                      rule_id: FC-R0-SOURCE-UNAVAILABLE
+                    source:
+                      agency: FEMA
+                      system: FEMA_NFHL_FIRM_PANELS
+                      source_id: https://hazards.fema.gov/arcgis/rest/services/public/NFHL/MapServer
+                      retrieved_at: '2026-09-02T14:13:27Z'
+                    adapter: fema-nfhl-firm-panel/v1
+                    derived_fields:
+                    - age_days
+                    - regulatory_status
+                    - currency_assessment
+                    reason_code: REFERENCE_RELEASE_NOT_ACTIVE
+                active: []
+                forecast: []
+                recent_history: []
+                provenance:
+                  query_id: qry_test_madison_001
+                  adapter_versions:
+                  - nws-alerts/v1
+                  - golden-geodata/v1
+                  source_status:
+                  - source: NWS_ALERTS
+                    status: EMPTY_EVALUATED
+                  - source: FLOODCASTER_GOLDEN_GEODATA
+                    status: NOT_READY
+                supported_hazard_families:
+                - FLOOD
+                - SEVERE_WEATHER
+                - TROPICAL_CYCLONE
+                - WILDFIRE
+                - COASTAL
+                - WINTER_WEATHER
+                - OTHER
+            agedEffectivePanel:
+              summary: Madison, WI — aged effective panel, no revisions
+              description: The commercially load-bearing case. Zone X, not in an SFHA,
+                no base flood elevation — and a governing panel that became effective
+                on 2009-01-02. Under 0.3.0 this response was indistinguishable from
+                one backed by a panel issued last quarter.
+              value:
+                schema_version: hazard-nearby/2.0.0
+                environment: TEST_ONLY
+                generated_at: '2026-09-02T14:13:27Z'
+                location:
+                  lat: 43.0731
+                  lon: -89.4012
+                radius_km: 10
+                reference_data:
+                  status: ACTIVE
+                  reason_code: null
+                  releases:
+                  - dataset_id: fema-nfhl-wi
+                    release_id: nfhl-wi-2026-08-15
+                    content_digest: sha256:0000000000000000000000000000000000000000000000000000000000000000
+                    lifecycle: ACTIVE
+                  property: null
+                  flood_zone:
+                    evaluation: EVALUATED
+                    zone_code: X
+                    zone_subtype: AREA OF MINIMAL FLOOD HAZARD
+                    in_sfha: false
+                    static_bfe_ft: null
+                    dfirm_id: 55025C
+                  firm_map:
+                    evaluation: EVALUATED
+                    firm_panel_id: 55025C0409G
+                    dfirm_id: 55025C
+                    panel_number: 0409
+                    suffix: G
+                    panel_type: Countywide, Panel Printed
+                    effective_date: '2009-01-02'
+                    preliminary_date: null
+                    age_days: 6452
+                    regulatory_status: EFFECTIVE
+                    source_citation: 55025C_STUDY8
+                    lomr:
+                      evaluation: ABSENT_EVALUATED
+                      intersecting_count: 0
+                      latest_effective_date: null
+                      revises_effective_panel: false
+                      case_numbers: []
+                    currency_assessment:
+                      classification: AGED_EFFECTIVE_MAP
+                      as_of: '2026-09-02'
+                      policy_id: firm-currency/v1
+                      derived: true
+                      rule_id: FC-R7-AGED
+                    source:
+                      agency: FEMA
+                      system: FEMA_NFHL_FIRM_PANELS
+                      source_id: 55025C0409G
+                      retrieved_at: '2026-09-02T14:13:27Z'
+                    adapter: fema-nfhl-firm-panel/v1
+                    derived_fields:
+                    - age_days
+                    - regulatory_status
+                    - currency_assessment
+                    - lomr.intersecting_count
+                    - lomr.latest_effective_date
+                    - lomr.revises_effective_panel
+                    reason_code: null
+                active: []
+                forecast: []
+                recent_history: []
+                provenance:
+                  query_id: qry_test_madison_002
+                  adapter_versions:
+                  - nws-alerts/v1
+                  - golden-geodata/v1
+                  - fema-nfhl-firm-panel/v1
+                  source_status:
+                  - source: NWS_ALERTS
+                    status: EMPTY_EVALUATED
+                  - source: FLOODCASTER_GOLDEN_GEODATA
+                    status: OK
+                  - source: FEMA_NFHL_FIRM_PANELS
+                    status: OK
+                  - source: FEMA_NFHL_LOMR
+                    status: EMPTY_EVALUATED
+                supported_hazard_families:
+                - FLOOD
+                - SEVERE_WEATHER
+                - TROPICAL_CYCLONE
+                - WILDFIRE
+                - COASTAL
+                - WINTER_WEATHER
+                - OTHER
+            unifiedHazardFamilies:
+              summary: One response containing flood, storm, hurricane, and fire records
+              description: 'TEST_ONLY contract example. It demonstrates one endpoint
+                and preserves source authority: NASA FIRMS is a source observation,
+                not an official fire alert.'
+              value:
+                schema_version: hazard-nearby/2.0.0
+                environment: TEST_ONLY
+                generated_at: '2026-09-02T18:30:00Z'
+                location:
+                  lat: 43.0731
+                  lon: -89.4012
+                radius_km: 100
+                reference_data:
+                  status: ACTIVE
+                  reason_code: null
+                  releases:
+                  - dataset_id: fema-nfhl-wi
+                    release_id: nfhl-wi-2026-08-15
+                    content_digest: sha256:0000000000000000000000000000000000000000000000000000000000000000
+                    lifecycle: ACTIVE
+                  property: null
+                  flood_zone:
+                    evaluation: EVALUATED
+                    zone_code: X
+                    zone_subtype: AREA OF MINIMAL FLOOD HAZARD
+                    in_sfha: false
+                    static_bfe_ft: null
+                    dfirm_id: 55025C
+                  firm_map:
+                    evaluation: EVALUATED
+                    firm_panel_id: 55025C0409G
+                    dfirm_id: 55025C
+                    panel_number: 0409
+                    suffix: G
+                    panel_type: Countywide, Panel Printed
+                    effective_date: '2009-01-02'
+                    preliminary_date: null
+                    age_days: 6452
+                    regulatory_status: EFFECTIVE
+                    source_citation: 55025C_STUDY8
+                    lomr:
+                      evaluation: ABSENT_EVALUATED
+                      intersecting_count: 0
+                      latest_effective_date: null
+                      revises_effective_panel: false
+                      case_numbers: []
+                    currency_assessment:
+                      classification: AGED_EFFECTIVE_MAP
+                      as_of: '2026-09-02'
+                      policy_id: firm-currency/v1
+                      derived: true
+                      rule_id: FC-R7-AGED
+                    source:
+                      agency: FEMA
+                      system: FEMA_NFHL_FIRM_PANELS
+                      source_id: 55025C0409G
+                      retrieved_at: '2026-09-02T14:13:27Z'
+                    adapter: fema-nfhl-firm-panel/v1
+                    derived_fields:
+                    - age_days
+                    - regulatory_status
+                    - currency_assessment
+                    - lomr.intersecting_count
+                    - lomr.latest_effective_date
+                    - lomr.revises_effective_panel
+                    reason_code: null
+                active:
+                - hazard_id: nws:alert:test-flash-flood-001
+                  hazard_type: FLASH_FLOOD_WARNING
+                  hazard_family: FLOOD
+                  record_kind: OFFICIAL_ALERT
+                  source:
+                    agency: NWS
+                    system: NWS_ALERTS
+                    source_id: test-flash-flood-001
+                    authority_class: OFFICIAL_ALERT
+                    source_updated_at: '2026-09-02T18:00:00Z'
+                    retrieved_at: '2026-09-02T18:30:00Z'
+                    content_digest: null
+                    adapter_id: nws-alerts/v1
+                    source_url: null
+                  state:
+                    status: ACTIVE
+                    observation_type: OBSERVED
+                    severity: SEVERE
+                    certainty: LIKELY
+                    urgency: IMMEDIATE
+                  time:
+                    issued: '2026-09-02T18:00:00Z'
+                    onset: '2026-09-02T18:00:00Z'
+                    expires: '2026-09-02T22:00:00Z'
+                    ended: null
+                  geometry:
+                    type: Point
+                    coordinates:
+                    - -89.45
+                    - 43.1
+                  centroid:
+                    lat: 43.1
+                    lon: -89.45
+                  distance_km: 6.1
+                  direction_degrees: 300
+                  direction_compass: NW
+                  estimated_arrival_at: null
+                  metrics:
+                  - code: EXPECTED_RAINFALL
+                    value: 75
+                    unit: mm
+                    source_field: parameters.NWSheadline
+                    measured_at: null
+                  impacts:
+                  - impact_type: INUNDATION
+                    severity: SEVERE
+                    description: TEST_ONLY flash-flood impact.
+                  details:
+                    detail_type: FLOOD
+                    flood_cause: HEAVY_RAIN
+                    inundation_depth_m: null
+                    stage_m: null
+                    discharge_cms: null
+                    forecast_hour: null
+                    reach_id: null
+                  provenance:
+                    authoritative: true
+                    derived: false
+                    provider: NWS
+                    authority: NWS
+                    dataset: NWS Alerts
+                    source_schema: CAP/NWS JSON
+                    source_record_version: null
+                    adapter: nws-alerts/v1
+                    transformation_version: null
+                    classification: OFFICIAL_ALERT
+                    derived_fields:
+                    - distance_km
+                    - direction_degrees
+                    - direction_compass
+                    source_retrieved_at: '2026-09-02T18:30:00Z'
+                    content_digest: null
+                    limitations:
+                    - TEST_ONLY synthetic contract example; not operational hazard
+                      information.
+                - hazard_id: nws:alert:test-severe-weather-001
+                  hazard_type: SEVERE_THUNDERSTORM_WARNING
+                  hazard_family: SEVERE_WEATHER
+                  record_kind: OFFICIAL_ALERT
+                  source:
+                    agency: NWS
+                    system: NWS_ALERTS
+                    source_id: test-severe-weather-001
+                    authority_class: OFFICIAL_ALERT
+                    source_updated_at: '2026-09-02T18:05:00Z'
+                    retrieved_at: '2026-09-02T18:30:00Z'
+                    content_digest: null
+                    adapter_id: nws-alerts/v1
+                    source_url: null
+                  state:
+                    status: ACTIVE
+                    observation_type: OBSERVED
+                    severity: SEVERE
+                    certainty: LIKELY
+                    urgency: IMMEDIATE
+                  time:
+                    issued: '2026-09-02T18:00:00Z'
+                    onset: '2026-09-02T18:00:00Z'
+                    expires: '2026-09-02T22:00:00Z'
+                    ended: null
+                  geometry:
+                    type: Point
+                    coordinates:
+                    - -89.55
+                    - 43.15
+                  centroid:
+                    lat: 43.15
+                    lon: -89.55
+                  distance_km: 15.2
+                  direction_degrees: 310
+                  direction_compass: NW
+                  estimated_arrival_at: '2026-09-02T19:05:00Z'
+                  metrics:
+                  - code: WIND_SPEED
+                    value: 27
+                    unit: m/s
+                    source_field: windThreat
+                    measured_at: null
+                  - code: HAIL_SIZE
+                    value: 25
+                    unit: mm
+                    source_field: hailThreat
+                    measured_at: null
+                  impacts:
+                  - impact_type: WIND
+                    severity: SEVERE
+                    description: TEST_ONLY wind impact.
+                  - impact_type: HAIL
+                    severity: MODERATE
+                    description: TEST_ONLY hail impact.
+                  details:
+                    detail_type: SEVERE_WEATHER
+                    event_type: SEVERE_THUNDERSTORM
+                    motion_direction_deg: 135
+                    motion_speed_mps: 16
+                    wind_speed_mps: 27
+                    hail_size_mm: 25
+                    lightning_rate_per_min: null
+                    tornado_probability_pct: null
+                    wind_probability_pct: null
+                    hail_probability_pct: null
+                  provenance:
+                    authoritative: true
+                    derived: false
+                    provider: NWS
+                    authority: NWS
+                    dataset: NWS Alerts
+                    source_schema: CAP/NWS JSON
+                    source_record_version: null
+                    adapter: nws-alerts/v1
+                    transformation_version: null
+                    classification: OFFICIAL_ALERT
+                    derived_fields:
+                    - distance_km
+                    - direction_degrees
+                    - direction_compass
+                    source_retrieved_at: '2026-09-02T18:30:00Z'
+                    content_digest: null
+                    limitations:
+                    - TEST_ONLY synthetic contract example; not operational hazard
+                      information.
+                - hazard_id: nasa:firms:test-hotspot-001
+                  hazard_type: ACTIVE_FIRE_DETECTION
+                  hazard_family: WILDFIRE
+                  record_kind: SOURCE_OBSERVATION
+                  source:
+                    agency: NASA
+                    system: NASA_FIRMS
+                    source_id: test-hotspot-001
+                    authority_class: SOURCE_OBSERVATION
+                    source_updated_at: '2026-09-02T17:55:00Z'
+                    retrieved_at: '2026-09-02T18:30:00Z'
+                    content_digest: null
+                    adapter_id: nasa-firms/v1
+                    source_url: null
+                  state:
+                    status: ACTIVE
+                    observation_type: OBSERVED
+                    severity: UNKNOWN
+                    certainty: OBSERVED
+                    urgency: UNKNOWN
+                  time:
+                    issued: null
+                    onset: '2026-09-02T17:55:00Z'
+                    expires: null
+                    ended: null
+                  geometry:
+                    type: Point
+                    coordinates:
+                    - -89.7
+                    - 43.25
+                  centroid:
+                    lat: 43.25
+                    lon: -89.7
+                  distance_km: 27.4
+                  direction_degrees: 320
+                  direction_compass: NW
+                  estimated_arrival_at: null
+                  metrics:
+                  - code: FIRE_RADIATIVE_POWER
+                    value: 18.4
+                    unit: MW
+                    source_field: frp
+                    measured_at: '2026-09-02T17:55:00Z'
+                  impacts: []
+                  details:
+                    detail_type: WILDFIRE
+                    record_type: SATELLITE_HOTSPOT
+                    incident_id: null
+                    incident_name: null
+                    detected_at: '2026-09-02T17:55:00Z'
+                    confidence_pct: 84
+                    fire_radiative_power_mw: 18.4
+                    brightness_temperature_k: null
+                    perimeter_area_sq_km: null
+                    containment_pct: null
+                    spread_direction_deg: null
+                    spread_rate_mps: null
+                  provenance:
+                    authoritative: true
+                    derived: false
+                    provider: NASA
+                    authority: NASA
+                    dataset: FIRMS active fire
+                    source_schema: FIRMS CSV/JSON
+                    source_record_version: null
+                    adapter: nasa-firms/v1
+                    transformation_version: null
+                    classification: SOURCE_OBSERVATION
+                    derived_fields:
+                    - distance_km
+                    - direction_degrees
+                    - direction_compass
+                    source_retrieved_at: '2026-09-02T18:30:00Z'
+                    content_digest: null
+                    limitations:
+                    - TEST_ONLY synthetic contract example; not operational hazard
+                      information.
+                forecast:
+                - hazard_id: nhc:advisory:test-cyclone-001
+                  hazard_type: POST_TROPICAL_CYCLONE_FORECAST
+                  hazard_family: TROPICAL_CYCLONE
+                  record_kind: FORECAST
+                  source:
+                    agency: NHC
+                    system: NHC_ADVISORY_GIS
+                    source_id: test-cyclone-001
+                    authority_class: FORECAST
+                    source_updated_at: '2026-09-02T18:00:00Z'
+                    retrieved_at: '2026-09-02T18:30:00Z'
+                    content_digest: null
+                    adapter_id: nhc-advisory-gis/v1
+                    source_url: null
+                  state:
+                    status: ACTIVE
+                    observation_type: FORECAST
+                    severity: SEVERE
+                    certainty: LIKELY
+                    urgency: EXPECTED
+                  time:
+                    issued: '2026-09-02T18:00:00Z'
+                    onset: '2026-09-03T06:00:00Z'
+                    expires: '2026-09-03T18:00:00Z'
+                    ended: null
+                  geometry:
+                    type: Point
+                    coordinates:
+                    - -88.5
+                    - 42.6
+                  centroid:
+                    lat: 42.6
+                    lon: -88.5
+                  distance_km: 90.8
+                  direction_degrees: 145
+                  direction_compass: SE
+                  estimated_arrival_at: '2026-09-03T09:00:00Z'
+                  metrics:
+                  - code: MAXIMUM_SUSTAINED_WIND
+                    value: 85
+                    unit: kt
+                    source_field: MAXWIND
+                    measured_at: '2026-09-02T18:00:00Z'
+                  - code: MINIMUM_PRESSURE
+                    value: 975
+                    unit: hPa
+                    source_field: MSLP
+                    measured_at: '2026-09-02T18:00:00Z'
+                  impacts:
+                  - impact_type: WIND
+                    severity: SEVERE
+                    description: TEST_ONLY forecast wind impact.
+                  - impact_type: SURGE
+                    severity: MODERATE
+                    description: TEST_ONLY forecast surge impact.
+                  details:
+                    detail_type: TROPICAL_CYCLONE
+                    storm_id: AL992026
+                    storm_name: TEST
+                    classification: POST_TROPICAL_CYCLONE
+                    category: null
+                    center_lat: 42.6
+                    center_lon: -88.5
+                    maximum_sustained_wind_kt: 85
+                    minimum_pressure_hpa: 975
+                    motion_direction_deg: 315
+                    motion_speed_kt: 12
+                    closest_approach_at: '2026-09-03T09:00:00Z'
+                  provenance:
+                    authoritative: true
+                    derived: false
+                    provider: NHC
+                    authority: NHC
+                    dataset: NHC advisory GIS
+                    source_schema: NHC GIS
+                    source_record_version: null
+                    adapter: nhc-advisory-gis/v1
+                    transformation_version: null
+                    classification: FORECAST
+                    derived_fields:
+                    - distance_km
+                    - direction_degrees
+                    - direction_compass
+                    source_retrieved_at: '2026-09-02T18:30:00Z'
+                    content_digest: null
+                    limitations:
+                    - TEST_ONLY synthetic contract example; not operational hazard
+                      information.
+                recent_history: []
+                provenance:
+                  query_id: qry_test_unified_hazards_001
+                  adapter_versions:
+                  - nws-alerts/v1
+                  - nhc-advisory-gis/v1
+                  - nasa-firms/v1
+                  - golden-geodata/v1
+                  source_status:
+                  - source: NWS_ALERTS
+                    status: OK
+                  - source: NHC_ADVISORY_GIS
+                    status: OK
+                  - source: NASA_FIRMS
+                    status: OK
+                  - source: FLOODCASTER_GOLDEN_GEODATA
+                    status: OK
+                  - source: FEMA_NFHL_FIRM_PANELS
+                    status: OK
+                  - source: FEMA_NFHL_LOMR
+                    status: EMPTY_EVALUATED
+                supported_hazard_families:
+                - FLOOD
+                - SEVERE_WEATHER
+                - TROPICAL_CYCLONE
+                - WILDFIRE
+                - COASTAL
+                - WINTER_WEATHER
+                - OTHER
+    InvalidHazardQuery:
+      description: Invalid coordinates or radius
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    HazardAuthFailure:
+      description: Authentication is required or expired
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    HazardSourceUnavailable:
+      description: A required upstream source is unavailable and the operation cannot
+        answer safely
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   schemas:
     OperationRequest:
       type: object
       additionalProperties: false
-      required: [operation_id, operation_type, observation]
+      required:
+      - operation_id
+      - operation_type
+      - observation
       properties:
         operation_id:
           type: string
-          pattern: '^OP-TEST-[A-Z0-9-]+$'
+          pattern: ^OP-TEST-[A-Z0-9-]+$
         operation_type:
           const: SUBMIT_FIELD_OBSERVATION
         observation:
-          $ref: './schemas/field-observation.schema.json'
+          $ref: '#/components/schemas/FieldObservation'
     PropertySearchResult:
       type: object
       additionalProperties: false
-      required: [environment, count, results]
+      required:
+      - environment
+      - count
+      - results
       properties:
-        environment: { const: TEST_ONLY }
-        count: { type: integer }
+        environment:
+          const: TEST_ONLY
+        count:
+          type: integer
         results:
           type: array
           items:
             type: object
             additionalProperties: false
-            required: [property_id, display_address]
+            required:
+            - property_id
+            - display_address
             properties:
-              property_id: { type: string }
-              display_address: { type: string }
+              property_id:
+                type: string
+              display_address:
+                type: string
     LayerIndex:
       type: object
       additionalProperties: false
-      required: [environment, aoi_bbox_wgs84, layers]
+      required:
+      - environment
+      - aoi_bbox_wgs84
+      - layers
       properties:
-        environment: { const: TEST_ONLY }
+        environment:
+          const: TEST_ONLY
         aoi_bbox_wgs84:
           type: array
-          items: { type: number }
+          items:
+            type: number
         layers:
           type: array
           items:
             type: object
-            required: [layer_name, layer_class, feature_count, size_bytes, sha256]
+            required:
+            - layer_name
+            - layer_class
+            - feature_count
+            - size_bytes
+            - sha256
             properties:
-              layer_name: { type: string }
+              layer_name:
+                type: string
               layer_class:
                 type: string
-                description: >-
-                  Semantic class of the layer, not a style hint. The POC corpus
-                  serves only HAZARD layers; the full enum is reserved so future
-                  layer types extend the index without a contract break. Clients
-                  must render unknown classes generically rather than failing.
-                enum: [OBSERVATION, HAZARD, EXPOSURE, CAPACITY, ROUTE, DETERMINATION, DECISION_SUPPORT, TASK]
-              file: { type: string }
-              format: { type: string }
-              crs: { type: string }
-              feature_count: { type: integer }
-              vertex_stats: { type: object }
-              size_bytes: { type: integer }
-              sha256: { type: string }
+                description: Semantic class of the layer, not a style hint. The POC
+                  corpus serves only HAZARD layers; the full enum is reserved so future
+                  layer types extend the index without a contract break. Clients must
+                  render unknown classes generically rather than failing.
+                enum:
+                - OBSERVATION
+                - HAZARD
+                - EXPOSURE
+                - CAPACITY
+                - ROUTE
+                - DETERMINATION
+                - DECISION_SUPPORT
+                - TASK
+              file:
+                type: string
+              format:
+                type: string
+              crs:
+                type: string
+              feature_count:
+                type: integer
+              vertex_stats:
+                type: object
+              size_bytes:
+                type: integer
+              sha256:
+                type: string
     Session:
       type: object
       additionalProperties: false
-      required: [environment, session_token, expires_at]
+      required:
+      - environment
+      - session_token
+      - expires_at
       properties:
-        environment: { const: TEST_ONLY }
-        session_token: { type: string }
-        expires_at: { type: string, format: date-time }
+        environment:
+          const: TEST_ONLY
+        session_token:
+          type: string
+        expires_at:
+          type: string
+          format: date-time
     Bootstrap:
       type: object
       additionalProperties: false
-      required: [environment, contract_status, property_id, determination_id, certificate_id, map_pack]
+      required:
+      - environment
+      - contract_status
+      - property_id
+      - determination_id
+      - certificate_id
+      - map_pack
       properties:
-        environment: { const: TEST_ONLY }
-        contract_status: { const: POC_CONTRACT_DRAFT }
-        property_id: { type: string }
-        determination_id: { type: string }
-        certificate_id: { type: string }
+        environment:
+          const: TEST_ONLY
+        contract_status:
+          const: POC_CONTRACT_DRAFT
+        property_id:
+          type: string
+        determination_id:
+          type: string
+        certificate_id:
+          type: string
         map_pack:
-          $ref: './schemas/map-pack-manifest.schema.json'
+          $ref: '#/components/schemas/MapPackManifest'
     PropertyReadModel:
       type: object
       additionalProperties: false
-      required: [environment, property_id, display_address, geometry, determination_ids]
+      required:
+      - environment
+      - property_id
+      - display_address
+      - geometry
+      - determination_ids
       properties:
-        environment: { const: TEST_ONLY }
-        property_id: { type: string }
-        display_address: { type: string }
+        environment:
+          const: TEST_ONLY
+        property_id:
+          type: string
+        display_address:
+          type: string
         geometry:
           type: object
-          required: [type, coordinates]
+          required:
+          - type
+          - coordinates
           properties:
-            type: { const: Polygon }
-            coordinates: { type: array }
+            type:
+              const: Polygon
+            coordinates:
+              type: array
         determination_ids:
           type: array
-          items: { type: string }
+          items:
+            type: string
+    Certificate:
+      title: Certificate envelope
+      type: object
+      additionalProperties: false
+      required:
+      - environment
+      - certificate_id
+      - determination_id
+      - issuer
+      - engine_digest
+      - issued_at
+      - artifact_digest
+      - signature
+      properties:
+        environment:
+          const: TEST_ONLY
+        certificate_id:
+          type: string
+        determination_id:
+          type: string
+        issuer:
+          type: string
+        engine_digest:
+          type: string
+          pattern: ^sha256:[a-f0-9]{64}$
+        issued_at:
+          type: string
+          format: date-time
+        artifact_digest:
+          type: string
+          pattern: ^sha256:[a-f0-9]{64}$
+        signature:
+          type: object
+          additionalProperties: false
+          required:
+          - algorithm
+          - key_id
+          - value
+          properties:
+            algorithm:
+              const: TEST_ONLY-Ed25519
+            key_id:
+              type: string
+            value:
+              type: string
+    FieldObservation:
+      title: Field observation
+      type: object
+      additionalProperties: false
+      required:
+      - environment
+      - schema_version
+      - artifact_class
+      - observation_id
+      - property_id
+      - created_by
+      - created_at
+      - observed_at
+      - location
+      - attestation_authority
+      - determination_authority
+      - sync_state
+      - evidence_state
+      - determination_state
+      - operation_id
+      properties:
+        environment:
+          const: TEST_ONLY
+        schema_version:
+          const: 1.0.0-poc
+        artifact_class:
+          const: FIELD_OBSERVATION
+        observation_id:
+          type: string
+          pattern: ^OBS-TEST-[A-Z0-9-]+$
+        property_id:
+          type: string
+        created_by:
+          type: object
+          additionalProperties: false
+          required:
+          - principal_id
+          - source
+          properties:
+            principal_id:
+              type: string
+            source:
+              const: MOBILE_USER
+        created_at:
+          type: string
+          format: date-time
+        observed_at:
+          type: string
+          format: date-time
+        location:
+          type: object
+          additionalProperties: false
+          required:
+          - latitude
+          - longitude
+          - horizontal_accuracy_m
+          - crs
+          - selection_method
+          - user_confirmed
+          properties:
+            latitude:
+              type: number
+              minimum: -90
+              maximum: 90
+            longitude:
+              type: number
+              minimum: -180
+              maximum: 180
+            horizontal_accuracy_m:
+              type: number
+              minimum: 0
+            crs:
+              const: EPSG:4326
+            selection_method:
+              enum:
+              - GPS_ASSISTED
+              - MAP
+              - MANUAL
+            user_confirmed:
+              type: boolean
+        notes:
+          type: string
+          maxLength: 4000
+        attachments:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - attachment_id
+            - media_type
+            - sha256
+            - metadata_policy
+            properties:
+              attachment_id:
+                type: string
+              media_type:
+                type: string
+              sha256:
+                type: string
+                pattern: ^[a-f0-9]{64}$
+              metadata_policy:
+                enum:
+                - STRIPPED
+                - PRESERVED_TEST_ONLY
+        attestation_authority:
+          const: USER
+        determination_authority:
+          const: NONE
+        sync_state:
+          enum:
+          - DRAFT
+          - PERSISTED_LOCAL
+          - QUEUED
+          - SENDING
+          - ACKNOWLEDGED
+          - RETRYABLE_ERROR
+        evidence_state:
+          enum:
+          - UNASSESSED
+          - ADMITTED
+          - REJECTED
+        determination_state:
+          const: NOT_ISSUED
+        operation_id:
+          type: string
+          pattern: ^OP-TEST-[A-Z0-9-]+$
+    IssuedDetermination:
+      title: Issued determination
+      type: object
+      additionalProperties: false
+      required:
+      - environment
+      - schema_version
+      - artifact_class
+      - determination_id
+      - property_id
+      - result
+      - certificate_id
+      - issuer
+      - engine
+      - issued_at
+      - artifact_digest
+      - determination_authority
+      - determination_state
+      - verification
+      properties:
+        environment:
+          const: TEST_ONLY
+        schema_version:
+          const: 1.0.0-poc
+        artifact_class:
+          const: ISSUED_DETERMINATION
+        determination_id:
+          type: string
+        property_id:
+          type: string
+        result:
+          type: object
+          additionalProperties: false
+          required:
+          - classification
+          - summary
+          - source_revision
+          properties:
+            classification:
+              type: string
+            summary:
+              type: string
+            source_revision:
+              type: string
+        certificate_id:
+          type: string
+        issuer:
+          type: string
+        engine:
+          type: object
+          additionalProperties: false
+          required:
+          - identity
+          - version
+          - digest
+          properties:
+            identity:
+              type: string
+            version:
+              type: string
+            digest:
+              type: string
+              pattern: ^sha256:[a-f0-9]{64}$
+        issued_at:
+          type: string
+          format: date-time
+        artifact_digest:
+          type: string
+          pattern: ^sha256:[a-f0-9]{64}$
+        determination_authority:
+          const: FLOODCASTER
+        determination_state:
+          const: ISSUED
+        verification:
+          type: object
+          additionalProperties: false
+          required:
+          - status
+          - verified_at
+          properties:
+            status:
+              enum:
+              - CURRENT
+              - SUPERSEDED
+              - REVOKED
+              - UNKNOWN
+            verified_at:
+              type:
+              - string
+              - 'null'
+              format: date-time
+            superseded_by:
+              type:
+              - string
+              - 'null'
+    MapPackManifest:
+      title: Test map-pack manifest
+      type: object
+      additionalProperties: false
+      required:
+      - environment
+      - pack_id
+      - aoi_id
+      - content_sha256
+      - size_bytes
+      - data_license
+      - download_uri
+      - authoritative
+      - purpose
+      properties:
+        environment:
+          const: TEST_ONLY
+        pack_id:
+          type: string
+        aoi_id:
+          type: string
+        content_sha256:
+          type: string
+          pattern: ^[a-f0-9]{64}$
+        size_bytes:
+          type: integer
+          minimum: 0
+        data_license:
+          type: string
+        download_uri:
+          type: string
+          format: uri
+        authoritative:
+          const: false
+        purpose:
+          const: PRESENTATION
+    OperationResult:
+      title: Operation result
+      type: object
+      additionalProperties: false
+      required:
+      - environment
+      - operation_id
+      - transport_state
+      - replay
+      - domain_outcome
+      - evidence_state
+      - determination_state
+      - acknowledged_at
+      properties:
+        environment:
+          const: TEST_ONLY
+        operation_id:
+          type: string
+        transport_state:
+          enum:
+          - ACKNOWLEDGED
+          - REJECTED_AT_BOUNDARY
+        replay:
+          type: boolean
+        domain_outcome:
+          enum:
+          - APPLIED
+          - VERIFY_REQUIRED
+          - REJECTED
+        evidence_state:
+          enum:
+          - UNASSESSED
+          - ADMITTED
+          - REJECTED
+        determination_state:
+          enum:
+          - NOT_ISSUED
+          - ISSUED
+        acknowledged_at:
+          type: string
+          format: date-time
+        determination_id:
+          type:
+          - string
+          - 'null'
+        certificate_id:
+          type:
+          - string
+          - 'null'
+        error:
+          type:
+          - object
+          - 'null'
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+          required:
+          - code
+          - message
+          additionalProperties: false
+    ErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - error
+      - generated_at
+      properties:
+        error:
+          type: object
+          additionalProperties: false
+          required:
+          - code
+          - message
+          properties:
+            code:
+              type: string
+              enum:
+              - INVALID_COORDINATES
+              - INVALID_RADIUS
+              - AUTH_REQUIRED
+              - AUTH_EXPIRED
+              - REFERENCE_DATA_NOT_READY
+              - REFERENCE_PANEL_NOT_EVALUATED
+              - SOURCE_UNAVAILABLE
+              - INTERNAL_ERROR
+            message:
+              type: string
+            retryable:
+              type: boolean
+              default: false
+        generated_at:
+          type: string
+          format: date-time
+    QueryLocation:
+      type: object
+      additionalProperties: false
+      required:
+      - lat
+      - lon
+      properties:
+        lat:
+          type: number
+          minimum: -90
+          maximum: 90
+        lon:
+          type: number
+          minimum: -180
+          maximum: 180
+    GeoJsonGeometry:
+      type:
+      - object
+      - 'null'
+      description: RFC 7946 geometry in WGS 84, or null when the authority supplies
+        no geometry
+      required:
+      - type
+      - coordinates
+      properties:
+        type:
+          type: string
+          enum:
+          - Point
+          - MultiPoint
+          - LineString
+          - MultiLineString
+          - Polygon
+          - MultiPolygon
+        coordinates:
+          type: array
+    ReferenceRelease:
+      type: object
+      additionalProperties: false
+      required:
+      - dataset_id
+      - release_id
+      - content_digest
+      - lifecycle
+      properties:
+        dataset_id:
+          type: string
+          description: Stable authoritative dataset identifier
+        release_id:
+          type: string
+          description: Exact release selected for this query
+        content_digest:
+          type: string
+          pattern: ^sha256:[a-f0-9]{64}$
+        lifecycle:
+          type: string
+          enum:
+          - ACTIVE
+    GoldenProperty:
+      type:
+      - object
+      - 'null'
+      additionalProperties: false
+      required:
+      - property_id
+      - geometry
+      properties:
+        property_id:
+          type: string
+        display_address:
+          type:
+          - string
+          - 'null'
+        geometry:
+          $ref: '#/components/schemas/GeoJsonGeometry'
+    GoldenFloodZone:
+      type:
+      - object
+      - 'null'
+      additionalProperties: false
+      required:
+      - evaluation
+      - in_sfha
+      properties:
+        evaluation:
+          type: string
+          enum:
+          - EVALUATED
+          - ABSENT_EVALUATED
+        zone_code:
+          type:
+          - string
+          - 'null'
+        zone_subtype:
+          type:
+          - string
+          - 'null'
+        in_sfha:
+          type: boolean
+        static_bfe_ft:
+          type:
+          - number
+          - 'null'
+        dfirm_id:
+          type:
+          - string
+          - 'null'
+    GoldenGeoDataContext:
+      type: object
+      additionalProperties: false
+      required:
+      - status
+      - releases
+      - property
+      - flood_zone
+      - firm_map
+      properties:
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - NOT_READY
+          - NOT_COVERED
+          - SOURCE_UNAVAILABLE
+          description: ACTIVE means the query used reconciled, activated reference
+            releases. NOT_READY includes an incomplete or DRAFT load and must never
+            be presented as authoritative.
+        reason_code:
+          type:
+          - string
+          - 'null'
+        releases:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReferenceRelease'
+        property:
+          $ref: '#/components/schemas/GoldenProperty'
+        flood_zone:
+          $ref: '#/components/schemas/GoldenFloodZone'
+        firm_map:
+          $ref: '#/components/schemas/FirmMapContext'
+    HazardSource:
+      type: object
+      additionalProperties: false
+      required:
+      - agency
+      - system
+      - source_id
+      - authority_class
+      - retrieved_at
+      properties:
+        agency:
+          type: string
+          minLength: 1
+          description: Issuing or observing organization, for example NWS, NOAA, NHC,
+            FEMA, NASA, NIFC, or a named state/local authority.
+        system:
+          type: string
+          minLength: 1
+          description: Namespaced source system or dataset, for example NWS_ALERTS,
+            NHC_ADVISORY_GIS, NWM_FIM, NASA_FIRMS, or FEMA_NFHL.
+        source_id:
+          type: string
+          minLength: 1
+        authority_class:
+          $ref: '#/components/schemas/HazardRecordKind'
+        source_updated_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        retrieved_at:
+          type: string
+          format: date-time
+        content_digest:
+          type:
+          - string
+          - 'null'
+          pattern: ^sha256:[a-f0-9]{64}$
+          description: Digest of the retained source record or source bundle when
+            available.
+        adapter_id:
+          type:
+          - string
+          - 'null'
+        source_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+    HazardState:
+      type: object
+      additionalProperties: false
+      required:
+      - status
+      - observation_type
+      - severity
+      - certainty
+      - urgency
+      properties:
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - EXPIRED
+          - CANCELLED
+          - HISTORICAL
+        observation_type:
+          type: string
+          enum:
+          - OBSERVED
+          - FORECAST
+          - HISTORICAL_OBSERVATION
+          - MODEL_DERIVED_CONTEXT
+        severity:
+          type: string
+          enum:
+          - EXTREME
+          - SEVERE
+          - MODERATE
+          - MINOR
+          - UNKNOWN
+        certainty:
+          type: string
+          enum:
+          - OBSERVED
+          - LIKELY
+          - POSSIBLE
+          - UNLIKELY
+          - UNKNOWN
+        urgency:
+          type: string
+          enum:
+          - IMMEDIATE
+          - EXPECTED
+          - FUTURE
+          - PAST
+          - UNKNOWN
+    HazardTime:
+      type: object
+      additionalProperties: false
+      required:
+      - issued
+      - onset
+      - expires
+      properties:
+        issued:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        onset:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        expires:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        ended:
+          type:
+          - string
+          - 'null'
+          format: date-time
+    HazardProvenance:
+      type: object
+      additionalProperties: false
+      required:
+      - authoritative
+      - derived
+      - provider
+      - authority
+      - dataset
+      - source_schema
+      - adapter
+      - classification
+      - derived_fields
+      - source_retrieved_at
+      - content_digest
+      - limitations
+      properties:
+        authoritative:
+          type: boolean
+        derived:
+          type: boolean
+        provider:
+          type: string
+        authority:
+          type: string
+        dataset:
+          type: string
+        source_schema:
+          type: string
+        source_record_version:
+          type:
+          - string
+          - 'null'
+        adapter:
+          type: string
+        transformation_version:
+          type:
+          - string
+          - 'null'
+        classification:
+          type: string
+          enum:
+          - OFFICIAL_ALERT
+          - SOURCE_OBSERVATION
+          - FORECAST
+          - HISTORICAL_RECORD
+          - FLOODCASTER_ANALYSIS
+        derived_fields:
+          type: array
+          items:
+            type: string
+        source_retrieved_at:
+          type: string
+          format: date-time
+        content_digest:
+          type:
+          - string
+          - 'null'
+          pattern: ^sha256:[a-f0-9]{64}$
+        limitations:
+          type: array
+          items:
+            type: string
+    HazardEvent:
+      type: object
+      additionalProperties: false
+      required:
+      - hazard_id
+      - hazard_type
+      - hazard_family
+      - record_kind
+      - source
+      - state
+      - time
+      - geometry
+      - metrics
+      - impacts
+      - details
+      - provenance
+      properties:
+        hazard_id:
+          type: string
+          description: Namespaced stable identifier, for example nws:alert:<id>
+        hazard_type:
+          type: string
+          description: Canonical uppercase hazard type
+        hazard_family:
+          $ref: '#/components/schemas/HazardFamily'
+        source:
+          $ref: '#/components/schemas/HazardSource'
+        state:
+          $ref: '#/components/schemas/HazardState'
+        time:
+          $ref: '#/components/schemas/HazardTime'
+        geometry:
+          $ref: '#/components/schemas/GeoJsonGeometry'
+          description: Source geometry. Null is explicit when the provider record
+            has no usable geometry.
+        distance_km:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/HazardMetric'
+        impacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/HazardImpact'
+        provenance:
+          $ref: '#/components/schemas/HazardProvenance'
+        record_kind:
+          $ref: '#/components/schemas/HazardRecordKind'
+        centroid:
+          oneOf:
+          - $ref: '#/components/schemas/QueryLocation'
+          - type: 'null'
+        direction_degrees:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+          maximum: 360
+        direction_compass:
+          type:
+          - string
+          - 'null'
+          enum:
+          - N
+          - NE
+          - E
+          - SE
+          - S
+          - SW
+          - W
+          - NW
+          - null
+        estimated_arrival_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        details:
+          $ref: '#/components/schemas/HazardDetails'
+    QueryProvenance:
+      type: object
+      additionalProperties: false
+      required:
+      - query_id
+      - adapter_versions
+      - source_status
+      properties:
+        query_id:
+          type: string
+        adapter_versions:
+          type: array
+          items:
+            type: string
+        source_status:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required:
+            - source
+            - status
+            properties:
+              source:
+                type: string
+              status:
+                type: string
+                enum:
+                - OK
+                - EMPTY_EVALUATED
+                - NOT_READY
+                - NOT_COVERED
+                - SOURCE_UNAVAILABLE
+    NearbyHazardsResponse:
+      type: object
+      additionalProperties: false
+      required:
+      - schema_version
+      - environment
+      - generated_at
+      - location
+      - radius_km
+      - reference_data
+      - supported_hazard_families
+      - active
+      - forecast
+      - recent_history
+      - provenance
+      properties:
+        schema_version:
+          const: hazard-nearby/2.0.0
+        environment:
+          type: string
+          enum:
+          - TEST_ONLY
+          - SANDBOX
+          - PRODUCTION
+        generated_at:
+          type: string
+          format: date-time
+        location:
+          $ref: '#/components/schemas/QueryLocation'
+        radius_km:
+          type: number
+          exclusiveMinimum: 0
+          maximum: 100
+        reference_data:
+          $ref: '#/components/schemas/GoldenGeoDataContext'
+        active:
+          type: array
+          items:
+            $ref: '#/components/schemas/HazardEvent'
+        forecast:
+          type: array
+          items:
+            $ref: '#/components/schemas/HazardEvent'
+        recent_history:
+          type: array
+          items:
+            $ref: '#/components/schemas/HazardEvent'
+        provenance:
+          $ref: '#/components/schemas/QueryProvenance'
+        supported_hazard_families:
+          type: array
+          items:
+            $ref: '#/components/schemas/HazardFamily'
+          uniqueItems: true
+    FirmMapSource:
+      type: object
+      additionalProperties: false
+      required:
+      - agency
+      - system
+      - source_id
+      - retrieved_at
+      properties:
+        agency:
+          type: string
+          enum:
+          - FEMA
+        system:
+          type: string
+          enum:
+          - FEMA_NFHL
+          - FEMA_NFHL_FIRM_PANELS
+          - FEMA_NFHL_LOMR
+        source_id:
+          type: string
+          description: Panel identifier where one was resolved, otherwise the service
+            endpoint
+        retrieved_at:
+          type: string
+          format: date-time
+    LomrContext:
+      type: object
+      additionalProperties: false
+      description: Letters of Map Revision intersecting the query point. A LOMR effective
+        after the panel effective date means the panel on file has been officially
+        revised and is no longer the whole answer.
+      required:
+      - evaluation
+      - intersecting_count
+      - latest_effective_date
+      - revises_effective_panel
+      properties:
+        evaluation:
+          type: string
+          enum:
+          - EVALUATED
+          - ABSENT_EVALUATED
+          - NOT_EVALUATED
+          description: 'EVALUATED: the revision layer answered and returned revisions.
+            ABSENT_EVALUATED: it answered and there are none. NOT_EVALUATED: it did
+            not answer; counts are null, never zero.'
+        intersecting_count:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+        latest_effective_date:
+          type:
+          - string
+          - 'null'
+          format: date
+        revises_effective_panel:
+          type:
+          - boolean
+          - 'null'
+        case_numbers:
+          type: array
+          items:
+            type: string
+    FirmCurrencyAssessment:
+      type: object
+      additionalProperties: false
+      description: Floodcaster's derived vintage classification. It is an assertion
+        about the age and revision state of the map, NOT about legal validity. An
+        effective panel remains legally effective regardless of this value; the regulatory
+        question belongs to the community and the lender.
+      required:
+      - classification
+      - as_of
+      - policy_id
+      - derived
+      properties:
+        classification:
+          type: string
+          enum:
+          - CURRENT_EFFECTIVE_MAP
+          - AGING_EFFECTIVE_MAP
+          - AGED_EFFECTIVE_MAP
+          - PENDING_REVISION
+          - REVISED_SINCE_PANEL
+          - PANEL_NOT_PRINTED
+          - NOT_ASSESSED
+        as_of:
+          type: string
+          format: date
+          description: Evaluation date. Age is relative to this, not to read time.
+        policy_id:
+          type: string
+          description: Versioned classification policy. Changing a threshold requires
+            a new policy_id so a stored determination replays to the same answer.
+          examples:
+          - firm-currency/v1
+        derived:
+          const: true
+          description: Always true. No authority publishes this field.
+        rule_id:
+          type:
+          - string
+          - 'null'
+          description: Identifier of the ordered rule that produced the classification
+    FirmMapContext:
+      title: FIRM panel currency context
+      type: object
+      additionalProperties: false
+      description: The vintage and revision state of the FEMA FIRM panel governing
+        the query point. Sourced from the NFHL FIRM Panel layer (S_FIRM_Pan) and the
+        LOMR layer (S_LOMR). Panel identity and dates are transcribed from FEMA; every
+        computed field is named in derived_fields.
+      required:
+      - evaluation
+      - firm_panel_id
+      - dfirm_id
+      - panel_number
+      - suffix
+      - panel_type
+      - effective_date
+      - preliminary_date
+      - age_days
+      - regulatory_status
+      - source_citation
+      - lomr
+      - currency_assessment
+      - source
+      - adapter
+      - derived_fields
+      properties:
+        evaluation:
+          type: string
+          enum:
+          - EVALUATED
+          - ABSENT_EVALUATED
+          - NOT_EVALUATED
+          description: 'EVALUATED: a governing panel was resolved. ABSENT_EVALUATED:
+            the authority answered and no panel covers this point. NOT_EVALUATED:
+            the authority did not answer. NOT_EVALUATED must never be presented as
+            an absence of flood hazard.'
+        firm_panel_id:
+          type:
+          - string
+          - 'null'
+          description: FEMA FIRM_PAN, e.g. 55025C0409G
+          examples:
+          - 55025C0409G
+        dfirm_id:
+          type:
+          - string
+          - 'null'
+          examples:
+          - 55025C
+        panel_number:
+          type:
+          - string
+          - 'null'
+          examples:
+          - 0409
+        suffix:
+          type:
+          - string
+          - 'null'
+          examples:
+          - G
+        panel_type:
+          type:
+          - string
+          - 'null'
+          description: 'FEMA PANEL_TYP verbatim. Deliberately not an enum: FEMA extends
+            this domain, and clients must render an unrecognised value generically
+            rather than fail.'
+          examples:
+          - Countywide, Panel Printed
+        effective_date:
+          type:
+          - string
+          - 'null'
+          format: date
+          description: FEMA EFF_DATE, the date the panel became effective
+        preliminary_date:
+          type:
+          - string
+          - 'null'
+          format: date
+          description: FEMA PRE_DATE. Non-null means a revision is in flight.
+        age_days:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+          description: DERIVED. Whole days from effective_date to currency_assessment.as_of.
+        regulatory_status:
+          type: string
+          enum:
+          - EFFECTIVE
+          - NOT_PRINTED
+          - PRELIMINARY_ONLY
+          - SUPERSEDED
+          - UNKNOWN
+          description: DERIVED. FEMA publishes no single status field.
+        source_citation:
+          type:
+          - string
+          - 'null'
+          description: FEMA SOURCE_CIT, the study backing the panel
+          examples:
+          - 55025C_STUDY8
+        lomr:
+          $ref: '#/components/schemas/LomrContext'
+        currency_assessment:
+          $ref: '#/components/schemas/FirmCurrencyAssessment'
+        source:
+          $ref: '#/components/schemas/FirmMapSource'
+        adapter:
+          type: string
+          examples:
+          - fema-nfhl-firm-panel/v1
+        derived_fields:
+          type: array
+          items:
+            type: string
+          description: Every field in this object computed rather than transcribed
+        reason_code:
+          type:
+          - string
+          - 'null'
+          enum:
+          - NOT_COVERED
+          - SOURCE_UNAVAILABLE
+          - REFERENCE_RELEASE_NOT_ACTIVE
+          - null
+        reason_detail:
+          type:
+          - string
+          - 'null'
+    HazardFamily:
+      type: string
+      enum:
+      - FLOOD
+      - SEVERE_WEATHER
+      - TROPICAL_CYCLONE
+      - WILDFIRE
+      - COASTAL
+      - WINTER_WEATHER
+      - OTHER
+    HazardRecordKind:
+      type: string
+      description: Authority-preserving class. Clients must display these classes
+        distinctly and must not promote one class into another.
+      enum:
+      - OFFICIAL_ALERT
+      - SOURCE_OBSERVATION
+      - FORECAST
+      - HISTORICAL_RECORD
+      - FLOODCASTER_ANALYSIS
+    HazardMetric:
+      type: object
+      additionalProperties: false
+      required:
+      - code
+      - value
+      - unit
+      - source_field
+      properties:
+        code:
+          type: string
+          pattern: ^[A-Z][A-Z0-9_]*$
+          description: Canonical metric code.
+        value:
+          type:
+          - number
+          - string
+          - boolean
+        unit:
+          type:
+          - string
+          - 'null'
+          description: Explicit unit such as km, m, kt, hPa, mm, percent, or count.
+            Null only for dimensionless or textual values.
+        source_field:
+          type:
+          - string
+          - 'null'
+          description: Original provider field used for this metric, when applicable.
+        measured_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+    HazardImpact:
+      type: object
+      additionalProperties: false
+      required:
+      - impact_type
+      - severity
+      - description
+      properties:
+        impact_type:
+          type: string
+          enum:
+          - INUNDATION
+          - RAINFALL
+          - SURGE
+          - WIND
+          - HAIL
+          - LIGHTNING
+          - FIRE
+          - SMOKE
+          - EVACUATION
+          - PROPERTY
+          - TRANSPORTATION
+          - OTHER
+        severity:
+          type: string
+          enum:
+          - EXTREME
+          - SEVERE
+          - MODERATE
+          - MINOR
+          - UNKNOWN
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 2000
+    FloodHazardDetails:
+      type: object
+      additionalProperties: false
+      required:
+      - detail_type
+      properties:
+        detail_type:
+          const: FLOOD
+        flood_cause:
+          type:
+          - string
+          - 'null'
+        inundation_depth_m:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+        stage_m:
+          type:
+          - number
+          - 'null'
+        discharge_cms:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+        forecast_hour:
+          type:
+          - integer
+          - 'null'
+          minimum: 0
+        reach_id:
+          type:
+          - string
+          - 'null'
+    SevereWeatherHazardDetails:
+      type: object
+      additionalProperties: false
+      required:
+      - detail_type
+      properties:
+        detail_type:
+          const: SEVERE_WEATHER
+        event_type:
+          type:
+          - string
+          - 'null'
+        motion_direction_deg:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+          maximum: 360
+        motion_speed_mps:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+        wind_speed_mps:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+        hail_size_mm:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+        lightning_rate_per_min:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+        tornado_probability_pct:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+          maximum: 100
+        wind_probability_pct:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+          maximum: 100
+        hail_probability_pct:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+          maximum: 100
+    TropicalCycloneHazardDetails:
+      type: object
+      additionalProperties: false
+      required:
+      - detail_type
+      properties:
+        detail_type:
+          const: TROPICAL_CYCLONE
+        storm_id:
+          type:
+          - string
+          - 'null'
+        storm_name:
+          type:
+          - string
+          - 'null'
+        classification:
+          type:
+          - string
+          - 'null'
+        category:
+          type:
+          - integer
+          - 'null'
+          minimum: 1
+          maximum: 5
+        center_lat:
+          type:
+          - number
+          - 'null'
+          minimum: -90
+          maximum: 90
+        center_lon:
+          type:
+          - number
+          - 'null'
+          minimum: -180
+          maximum: 180
+        maximum_sustained_wind_kt:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+        minimum_pressure_hpa:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+        motion_direction_deg:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+          maximum: 360
+        motion_speed_kt:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+        closest_approach_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+    WildfireHazardDetails:
+      type: object
+      additionalProperties: false
+      description: Fire detections, perimeters, incidents, and official alerts retain
+        their original evidence class; a satellite hotspot is not an official evacuation
+        alert.
+      required:
+      - detail_type
+      - record_type
+      properties:
+        detail_type:
+          const: WILDFIRE
+        record_type:
+          type: string
+          enum:
+          - SATELLITE_HOTSPOT
+          - FIRE_PERIMETER
+          - INCIDENT
+          - OFFICIAL_ALERT
+        incident_id:
+          type:
+          - string
+          - 'null'
+        incident_name:
+          type:
+          - string
+          - 'null'
+        detected_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        confidence_pct:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+          maximum: 100
+        fire_radiative_power_mw:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+        brightness_temperature_k:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+        perimeter_area_sq_km:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+        containment_pct:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+          maximum: 100
+        spread_direction_deg:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+          maximum: 360
+        spread_rate_mps:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+    CoastalHazardDetails:
+      type: object
+      additionalProperties: false
+      required:
+      - detail_type
+      properties:
+        detail_type:
+          const: COASTAL
+        surge_height_m:
+          type:
+          - number
+          - 'null'
+        wave_height_m:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+        water_level_m:
+          type:
+          - number
+          - 'null'
+        datum:
+          type:
+          - string
+          - 'null'
+    WinterWeatherHazardDetails:
+      type: object
+      additionalProperties: false
+      required:
+      - detail_type
+      properties:
+        detail_type:
+          const: WINTER_WEATHER
+        snowfall_mm:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+        ice_accumulation_mm:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+        wind_speed_mps:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+        visibility_m:
+          type:
+          - number
+          - 'null'
+          minimum: 0
+    OtherHazardDetails:
+      type: object
+      additionalProperties: false
+      required:
+      - detail_type
+      - summary
+      properties:
+        detail_type:
+          const: OTHER
+        summary:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    HazardDetails:
+      oneOf:
+      - $ref: '#/components/schemas/FloodHazardDetails'
+      - $ref: '#/components/schemas/SevereWeatherHazardDetails'
+      - $ref: '#/components/schemas/TropicalCycloneHazardDetails'
+      - $ref: '#/components/schemas/WildfireHazardDetails'
+      - $ref: '#/components/schemas/CoastalHazardDetails'
+      - $ref: '#/components/schemas/WinterWeatherHazardDetails'
+      - $ref: '#/components/schemas/OtherHazardDetails'
+      discriminator:
+        propertyName: detail_type
+        mapping:
+          FLOOD: '#/components/schemas/FloodHazardDetails'
+          SEVERE_WEATHER: '#/components/schemas/SevereWeatherHazardDetails'
+          TROPICAL_CYCLONE: '#/components/schemas/TropicalCycloneHazardDetails'
+          WILDFIRE: '#/components/schemas/WildfireHazardDetails'
+          COASTAL: '#/components/schemas/CoastalHazardDetails'
+          WINTER_WEATHER: '#/components/schemas/WinterWeatherHazardDetails'
+          OTHER: '#/components/schemas/OtherHazardDetails'
+x-contract-invariants:
+- HazardEvent.details.detail_type MUST equal HazardEvent.hazard_family.
+- HazardEvent.source.authority_class MUST equal HazardEvent.record_kind.
+- OFFICIAL_ALERT is reserved for a record issued as an alert by the named source authority.
+- A satellite fire hotspot, model output, field observation, or Floodcaster analysis
+  MUST NOT be presented as an official alert.
+- An empty evaluated result MUST remain distinct from NOT_READY, NOT_COVERED, and
+  SOURCE_UNAVAILABLE.
+- The mobile client MUST NOT convert hazard context or a field observation into a
+  certified Floodcaster determination.

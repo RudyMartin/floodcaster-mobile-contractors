@@ -1,7 +1,7 @@
 {
   "name": "floodcaster-mobile-contract-mock",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.5.0",
   "type": "module",
   "scripts": {
     "start": "node server.mjs"

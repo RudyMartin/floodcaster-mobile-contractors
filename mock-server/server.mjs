@@ -152,6 +152,48 @@ createServer(async (request, response) => {
       });
     }
 
+    if (key === 'GET /mobile/v1/hazards/nearby') {
+      const auth = authenticate(request);
+      if (!auth.ok) return send(response, 401, { environment: 'TEST_ONLY', error: auth.error });
+
+      const lat = Number(url.searchParams.get('lat'));
+      const lon = Number(url.searchParams.get('lon'));
+      const radiusKm = Number(url.searchParams.get('radius_km') || 10);
+      if (!Number.isFinite(lat) || lat < -90 || lat > 90
+        || !Number.isFinite(lon) || lon < -180 || lon > 180
+        || !Number.isFinite(radiusKm) || radiusKm <= 0 || radiusKm > 100) {
+        return send(response, 400, { environment: 'TEST_ONLY', error: 'INVALID_HAZARD_QUERY' });
+      }
+
+      const result = await fixture('hazards-nearby.json');
+      if (Math.abs(lat - result.location.lat) > 0.000001 || Math.abs(lon - result.location.lon) > 0.000001) {
+        return send(response, 400, {
+          environment: 'TEST_ONLY',
+          error: 'TEST_LOCATION_NOT_AVAILABLE',
+          message: `Use lat=${result.location.lat}&lon=${result.location.lon} for the deterministic Golden GeoData fixture.`
+        });
+      }
+
+      const requestedFamilies = url.searchParams.getAll('hazard_family')
+        .flatMap((value) => value.split(','))
+        .filter(Boolean);
+      const requestedScopes = url.searchParams.getAll('time_scope')
+        .flatMap((value) => value.split(','))
+        .filter(Boolean);
+      const familySet = new Set(requestedFamilies);
+      const scopeSet = new Set(requestedScopes);
+      const includeFamily = (event) => familySet.size === 0 || familySet.has(event.hazard_family);
+      const filterEvents = (events) => events.filter((event) => includeFamily(event)
+        && (event.distance_km === null || event.distance_km <= radiusKm));
+
+      result.radius_km = radiusKm;
+      result.active = scopeSet.size === 0 || scopeSet.has('ACTIVE') ? filterEvents(result.active) : [];
+      result.forecast = scopeSet.size === 0 || scopeSet.has('FORECAST') ? filterEvents(result.forecast) : [];
+      result.recent_history = scopeSet.size === 0 || scopeSet.has('RECENT_HISTORY')
+        ? filterEvents(result.recent_history) : [];
+      return send(response, 200, result);
+    }
+
     if (key === 'POST /mobile/v1/operations') {
       const auth = authenticate(request);
       if (!auth.ok) return send(response, 401, { environment: 'TEST_ONLY', error: auth.error });

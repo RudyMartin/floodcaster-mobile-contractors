@@ -1,0 +1,522 @@
+{
+  "schema_version": "hazard-nearby/2.0.0",
+  "environment": "TEST_ONLY",
+  "generated_at": "2026-09-02T18:30:00Z",
+  "location": {
+    "lat": 43.0731,
+    "lon": -89.4012
+  },
+  "radius_km": 100,
+  "reference_data": {
+    "status": "ACTIVE",
+    "reason_code": null,
+    "releases": [
+      {
+        "dataset_id": "fema-nfhl-wi",
+        "release_id": "nfhl-wi-2026-08-15",
+        "content_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "lifecycle": "ACTIVE"
+      }
+    ],
+    "property": null,
+    "flood_zone": {
+      "evaluation": "EVALUATED",
+      "zone_code": "X",
+      "zone_subtype": "AREA OF MINIMAL FLOOD HAZARD",
+      "in_sfha": false,
+      "static_bfe_ft": null,
+      "dfirm_id": "55025C"
+    },
+    "firm_map": {
+      "evaluation": "EVALUATED",
+      "firm_panel_id": "55025C0409G",
+      "dfirm_id": "55025C",
+      "panel_number": "0409",
+      "suffix": "G",
+      "panel_type": "Countywide, Panel Printed",
+      "effective_date": "2009-01-02",
+      "preliminary_date": null,
+      "age_days": 6452,
+      "regulatory_status": "EFFECTIVE",
+      "source_citation": "55025C_STUDY8",
+      "lomr": {
+        "evaluation": "ABSENT_EVALUATED",
+        "intersecting_count": 0,
+        "latest_effective_date": null,
+        "revises_effective_panel": false,
+        "case_numbers": []
+      },
+      "currency_assessment": {
+        "classification": "AGED_EFFECTIVE_MAP",
+        "as_of": "2026-09-02",
+        "policy_id": "firm-currency/v1",
+        "derived": true,
+        "rule_id": "FC-R7-AGED"
+      },
+      "source": {
+        "agency": "FEMA",
+        "system": "FEMA_NFHL_FIRM_PANELS",
+        "source_id": "55025C0409G",
+        "retrieved_at": "2026-09-02T14:13:27Z"
+      },
+      "adapter": "fema-nfhl-firm-panel/v1",
+      "derived_fields": [
+        "age_days",
+        "regulatory_status",
+        "currency_assessment",
+        "lomr.intersecting_count",
+        "lomr.latest_effective_date",
+        "lomr.revises_effective_panel"
+      ],
+      "reason_code": null
+    }
+  },
+  "active": [
+    {
+      "hazard_id": "nws:alert:test-flash-flood-001",
+      "hazard_type": "FLASH_FLOOD_WARNING",
+      "hazard_family": "FLOOD",
+      "record_kind": "OFFICIAL_ALERT",
+      "source": {
+        "agency": "NWS",
+        "system": "NWS_ALERTS",
+        "source_id": "test-flash-flood-001",
+        "authority_class": "OFFICIAL_ALERT",
+        "source_updated_at": "2026-09-02T18:00:00Z",
+        "retrieved_at": "2026-09-02T18:30:00Z",
+        "content_digest": null,
+        "adapter_id": "nws-alerts/v1",
+        "source_url": null
+      },
+      "state": {
+        "status": "ACTIVE",
+        "observation_type": "OBSERVED",
+        "severity": "SEVERE",
+        "certainty": "LIKELY",
+        "urgency": "IMMEDIATE"
+      },
+      "time": {
+        "issued": "2026-09-02T18:00:00Z",
+        "onset": "2026-09-02T18:00:00Z",
+        "expires": "2026-09-02T22:00:00Z",
+        "ended": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -89.45,
+          43.1
+        ]
+      },
+      "centroid": {
+        "lat": 43.1,
+        "lon": -89.45
+      },
+      "distance_km": 6.1,
+      "direction_degrees": 300,
+      "direction_compass": "NW",
+      "estimated_arrival_at": null,
+      "metrics": [
+        {
+          "code": "EXPECTED_RAINFALL",
+          "value": 75,
+          "unit": "mm",
+          "source_field": "parameters.NWSheadline",
+          "measured_at": null
+        }
+      ],
+      "impacts": [
+        {
+          "impact_type": "INUNDATION",
+          "severity": "SEVERE",
+          "description": "TEST_ONLY flash-flood impact."
+        }
+      ],
+      "details": {
+        "detail_type": "FLOOD",
+        "flood_cause": "HEAVY_RAIN",
+        "inundation_depth_m": null,
+        "stage_m": null,
+        "discharge_cms": null,
+        "forecast_hour": null,
+        "reach_id": null
+      },
+      "provenance": {
+        "authoritative": true,
+        "derived": false,
+        "provider": "NWS",
+        "authority": "NWS",
+        "dataset": "NWS Alerts",
+        "source_schema": "CAP/NWS JSON",
+        "source_record_version": null,
+        "adapter": "nws-alerts/v1",
+        "transformation_version": null,
+        "classification": "OFFICIAL_ALERT",
+        "derived_fields": [
+          "distance_km",
+          "direction_degrees",
+          "direction_compass"
+        ],
+        "source_retrieved_at": "2026-09-02T18:30:00Z",
+        "content_digest": null,
+        "limitations": [
+          "TEST_ONLY synthetic contract example; not operational hazard information."
+        ]
+      }
+    },
+    {
+      "hazard_id": "nws:alert:test-severe-weather-001",
+      "hazard_type": "SEVERE_THUNDERSTORM_WARNING",
+      "hazard_family": "SEVERE_WEATHER",
+      "record_kind": "OFFICIAL_ALERT",
+      "source": {
+        "agency": "NWS",
+        "system": "NWS_ALERTS",
+        "source_id": "test-severe-weather-001",
+        "authority_class": "OFFICIAL_ALERT",
+        "source_updated_at": "2026-09-02T18:05:00Z",
+        "retrieved_at": "2026-09-02T18:30:00Z",
+        "content_digest": null,
+        "adapter_id": "nws-alerts/v1",
+        "source_url": null
+      },
+      "state": {
+        "status": "ACTIVE",
+        "observation_type": "OBSERVED",
+        "severity": "SEVERE",
+        "certainty": "LIKELY",
+        "urgency": "IMMEDIATE"
+      },
+      "time": {
+        "issued": "2026-09-02T18:00:00Z",
+        "onset": "2026-09-02T18:00:00Z",
+        "expires": "2026-09-02T22:00:00Z",
+        "ended": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -89.55,
+          43.15
+        ]
+      },
+      "centroid": {
+        "lat": 43.15,
+        "lon": -89.55
+      },
+      "distance_km": 15.2,
+      "direction_degrees": 310,
+      "direction_compass": "NW",
+      "estimated_arrival_at": "2026-09-02T19:05:00Z",
+      "metrics": [
+        {
+          "code": "WIND_SPEED",
+          "value": 27,
+          "unit": "m/s",
+          "source_field": "windThreat",
+          "measured_at": null
+        },
+        {
+          "code": "HAIL_SIZE",
+          "value": 25,
+          "unit": "mm",
+          "source_field": "hailThreat",
+          "measured_at": null
+        }
+      ],
+      "impacts": [
+        {
+          "impact_type": "WIND",
+          "severity": "SEVERE",
+          "description": "TEST_ONLY wind impact."
+        },
+        {
+          "impact_type": "HAIL",
+          "severity": "MODERATE",
+          "description": "TEST_ONLY hail impact."
+        }
+      ],
+      "details": {
+        "detail_type": "SEVERE_WEATHER",
+        "event_type": "SEVERE_THUNDERSTORM",
+        "motion_direction_deg": 135,
+        "motion_speed_mps": 16,
+        "wind_speed_mps": 27,
+        "hail_size_mm": 25,
+        "lightning_rate_per_min": null,
+        "tornado_probability_pct": null,
+        "wind_probability_pct": null,
+        "hail_probability_pct": null
+      },
+      "provenance": {
+        "authoritative": true,
+        "derived": false,
+        "provider": "NWS",
+        "authority": "NWS",
+        "dataset": "NWS Alerts",
+        "source_schema": "CAP/NWS JSON",
+        "source_record_version": null,
+        "adapter": "nws-alerts/v1",
+        "transformation_version": null,
+        "classification": "OFFICIAL_ALERT",
+        "derived_fields": [
+          "distance_km",
+          "direction_degrees",
+          "direction_compass"
+        ],
+        "source_retrieved_at": "2026-09-02T18:30:00Z",
+        "content_digest": null,
+        "limitations": [
+          "TEST_ONLY synthetic contract example; not operational hazard information."
+        ]
+      }
+    },
+    {
+      "hazard_id": "nasa:firms:test-hotspot-001",
+      "hazard_type": "ACTIVE_FIRE_DETECTION",
+      "hazard_family": "WILDFIRE",
+      "record_kind": "SOURCE_OBSERVATION",
+      "source": {
+        "agency": "NASA",
+        "system": "NASA_FIRMS",
+        "source_id": "test-hotspot-001",
+        "authority_class": "SOURCE_OBSERVATION",
+        "source_updated_at": "2026-09-02T17:55:00Z",
+        "retrieved_at": "2026-09-02T18:30:00Z",
+        "content_digest": null,
+        "adapter_id": "nasa-firms/v1",
+        "source_url": null
+      },
+      "state": {
+        "status": "ACTIVE",
+        "observation_type": "OBSERVED",
+        "severity": "UNKNOWN",
+        "certainty": "OBSERVED",
+        "urgency": "UNKNOWN"
+      },
+      "time": {
+        "issued": null,
+        "onset": "2026-09-02T17:55:00Z",
+        "expires": null,
+        "ended": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -89.7,
+          43.25
+        ]
+      },
+      "centroid": {
+        "lat": 43.25,
+        "lon": -89.7
+      },
+      "distance_km": 27.4,
+      "direction_degrees": 320,
+      "direction_compass": "NW",
+      "estimated_arrival_at": null,
+      "metrics": [
+        {
+          "code": "FIRE_RADIATIVE_POWER",
+          "value": 18.4,
+          "unit": "MW",
+          "source_field": "frp",
+          "measured_at": "2026-09-02T17:55:00Z"
+        }
+      ],
+      "impacts": [],
+      "details": {
+        "detail_type": "WILDFIRE",
+        "record_type": "SATELLITE_HOTSPOT",
+        "incident_id": null,
+        "incident_name": null,
+        "detected_at": "2026-09-02T17:55:00Z",
+        "confidence_pct": 84,
+        "fire_radiative_power_mw": 18.4,
+        "brightness_temperature_k": null,
+        "perimeter_area_sq_km": null,
+        "containment_pct": null,
+        "spread_direction_deg": null,
+        "spread_rate_mps": null
+      },
+      "provenance": {
+        "authoritative": true,
+        "derived": false,
+        "provider": "NASA",
+        "authority": "NASA",
+        "dataset": "FIRMS active fire",
+        "source_schema": "FIRMS CSV/JSON",
+        "source_record_version": null,
+        "adapter": "nasa-firms/v1",
+        "transformation_version": null,
+        "classification": "SOURCE_OBSERVATION",
+        "derived_fields": [
+          "distance_km",
+          "direction_degrees",
+          "direction_compass"
+        ],
+        "source_retrieved_at": "2026-09-02T18:30:00Z",
+        "content_digest": null,
+        "limitations": [
+          "TEST_ONLY synthetic contract example; not operational hazard information."
+        ]
+      }
+    }
+  ],
+  "forecast": [
+    {
+      "hazard_id": "nhc:advisory:test-cyclone-001",
+      "hazard_type": "POST_TROPICAL_CYCLONE_FORECAST",
+      "hazard_family": "TROPICAL_CYCLONE",
+      "record_kind": "FORECAST",
+      "source": {
+        "agency": "NHC",
+        "system": "NHC_ADVISORY_GIS",
+        "source_id": "test-cyclone-001",
+        "authority_class": "FORECAST",
+        "source_updated_at": "2026-09-02T18:00:00Z",
+        "retrieved_at": "2026-09-02T18:30:00Z",
+        "content_digest": null,
+        "adapter_id": "nhc-advisory-gis/v1",
+        "source_url": null
+      },
+      "state": {
+        "status": "ACTIVE",
+        "observation_type": "FORECAST",
+        "severity": "SEVERE",
+        "certainty": "LIKELY",
+        "urgency": "EXPECTED"
+      },
+      "time": {
+        "issued": "2026-09-02T18:00:00Z",
+        "onset": "2026-09-03T06:00:00Z",
+        "expires": "2026-09-03T18:00:00Z",
+        "ended": null
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -88.5,
+          42.6
+        ]
+      },
+      "centroid": {
+        "lat": 42.6,
+        "lon": -88.5
+      },
+      "distance_km": 90.8,
+      "direction_degrees": 145,
+      "direction_compass": "SE",
+      "estimated_arrival_at": "2026-09-03T09:00:00Z",
+      "metrics": [
+        {
+          "code": "MAXIMUM_SUSTAINED_WIND",
+          "value": 85,
+          "unit": "kt",
+          "source_field": "MAXWIND",
+          "measured_at": "2026-09-02T18:00:00Z"
+        },
+        {
+          "code": "MINIMUM_PRESSURE",
+          "value": 975,
+          "unit": "hPa",
+          "source_field": "MSLP",
+          "measured_at": "2026-09-02T18:00:00Z"
+        }
+      ],
+      "impacts": [
+        {
+          "impact_type": "WIND",
+          "severity": "SEVERE",
+          "description": "TEST_ONLY forecast wind impact."
+        },
+        {
+          "impact_type": "SURGE",
+          "severity": "MODERATE",
+          "description": "TEST_ONLY forecast surge impact."
+        }
+      ],
+      "details": {
+        "detail_type": "TROPICAL_CYCLONE",
+        "storm_id": "AL992026",
+        "storm_name": "TEST",
+        "classification": "POST_TROPICAL_CYCLONE",
+        "category": null,
+        "center_lat": 42.6,
+        "center_lon": -88.5,
+        "maximum_sustained_wind_kt": 85,
+        "minimum_pressure_hpa": 975,
+        "motion_direction_deg": 315,
+        "motion_speed_kt": 12,
+        "closest_approach_at": "2026-09-03T09:00:00Z"
+      },
+      "provenance": {
+        "authoritative": true,
+        "derived": false,
+        "provider": "NHC",
+        "authority": "NHC",
+        "dataset": "NHC advisory GIS",
+        "source_schema": "NHC GIS",
+        "source_record_version": null,
+        "adapter": "nhc-advisory-gis/v1",
+        "transformation_version": null,
+        "classification": "FORECAST",
+        "derived_fields": [
+          "distance_km",
+          "direction_degrees",
+          "direction_compass"
+        ],
+        "source_retrieved_at": "2026-09-02T18:30:00Z",
+        "content_digest": null,
+        "limitations": [
+          "TEST_ONLY synthetic contract example; not operational hazard information."
+        ]
+      }
+    }
+  ],
+  "recent_history": [],
+  "provenance": {
+    "query_id": "qry_test_unified_hazards_001",
+    "adapter_versions": [
+      "nws-alerts/v1",
+      "nhc-advisory-gis/v1",
+      "nasa-firms/v1",
+      "golden-geodata/v1"
+    ],
+    "source_status": [
+      {
+        "source": "NWS_ALERTS",
+        "status": "OK"
+      },
+      {
+        "source": "NHC_ADVISORY_GIS",
+        "status": "OK"
+      },
+      {
+        "source": "NASA_FIRMS",
+        "status": "OK"
+      },
+      {
+        "source": "FLOODCASTER_GOLDEN_GEODATA",
+        "status": "OK"
+      },
+      {
+        "source": "FEMA_NFHL_FIRM_PANELS",
+        "status": "OK"
+      },
+      {
+        "source": "FEMA_NFHL_LOMR",
+        "status": "EMPTY_EVALUATED"
+      }
+    ]
+  },
+  "supported_hazard_families": [
+    "FLOOD",
+    "SEVERE_WEATHER",
+    "TROPICAL_CYCLONE",
+    "WILDFIRE",
+    "COASTAL",
+    "WINTER_WEATHER",
+    "OTHER"
+  ]
+}
