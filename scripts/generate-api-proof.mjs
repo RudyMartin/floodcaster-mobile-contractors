@@ -70,6 +70,7 @@ const calls = [
   { title: 'GET /mobile/v1/layers/flood-stress-3x (F3 probe layer)', req: { path: '/mobile/v1/layers/flood-stress-3x' } },
   { title: 'GET /mobile/v1/map-pack (offline PMTiles download)', req: { path: '/mobile/v1/map-pack' }, binary: true },
   { title: 'POST /mobile/v1/session', req: { method: 'POST', path: '/mobile/v1/session' } },
+  { title: 'GET /mobile/v1/hazards/nearby (all hazard families + Golden GeoData)', req: { path: '/mobile/v1/hazards/nearby?lat=43.0731&lon=-89.4012&radius_km=100', headers: auth } },
   { title: 'POST /mobile/v1/operations — no token (transport 401)', req: { method: 'POST', path: '/mobile/v1/operations', headers: { 'content-type': 'application/json' }, body: operationBody } },
   { title: 'POST /mobile/v1/operations — applied', req: { method: 'POST', path: '/mobile/v1/operations', headers: auth, body: operationBody } },
   { title: 'POST /mobile/v1/operations — replay', req: { method: 'POST', path: '/mobile/v1/operations', headers: { ...auth, 'x-floodcaster-mock-scenario': 'replay' }, body: operationBody } },

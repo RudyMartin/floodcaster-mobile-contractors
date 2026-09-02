@@ -20,6 +20,7 @@ The machine-readable contract: [floodcaster-mobile.openapi.yaml](../contracts/fl
 | GET /mobile/v1/layers/flood-stress-3x (F3 probe layer) | 200 | 27,555,547 | 89.3 |
 | GET /mobile/v1/map-pack (offline PMTiles download) | 200 | 602,118 | 10.6 |
 | POST /mobile/v1/session | 201 | 116 | 2.5 |
+| GET /mobile/v1/hazards/nearby (all hazard families + Golden GeoData) | 200 | 14,454 | 4.9 |
 | POST /mobile/v1/operations — no token (transport 401) | 401 | 60 | 15.5 |
 | POST /mobile/v1/operations — applied | 200 | 339 | 15.7 |
 | POST /mobile/v1/operations — replay | 200 | 338 | 15.5 |
@@ -330,6 +331,60 @@ Status **201** · payload **116 bytes** · median response **2.5 ms** (5 samples
   "expires_at": "2026-09-01T22:24:57.102Z"
 }
 ```
+
+## GET /mobile/v1/hazards/nearby (all hazard families + Golden GeoData)
+
+Status **200** · payload **14,454 bytes** · median response **4.9 ms** (5 samples, local loopback)
+
+```json
+{
+  "schema_version": "hazard-nearby/2.0.0",
+  "environment": "TEST_ONLY",
+  "generated_at": "2026-09-02T18:30:00Z",
+  "location": {
+    "lat": 43.0731,
+    "lon": -89.4012
+  },
+  "radius_km": 100,
+  "reference_data": {
+    "status": "ACTIVE",
+    "reason_code": null,
+    "releases": [
+      {
+        "dataset_id": "fema-nfhl-wi",
+        "release_id": "nfhl-wi-2026-08-15",
+        "content_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "lifecycle": "ACTIVE"
+      }
+    ],
+    "property": null,
+    "flood_zone": {
+      "evaluation": "EVALUATED",
+      "zone_code": "X",
+      "zone_subtype": "AREA OF MINIMAL FLOOD HAZARD",
+      "in_sfha": false,
+      "static_bfe_ft": null,
+      "dfirm_id": "55025C"
+    },
+    "firm_map": {
+      "evaluation": "EVALUATED",
+      "firm_panel_id": "55025C0409G",
+      "effective_date": "2009-01-02",
+      "regulatory_status": "EFFECTIVE"
+    }
+  },
+  "active": [
+    { "hazard_family": "FLOOD", "record_kind": "OFFICIAL_ALERT" },
+    { "hazard_family": "SEVERE_WEATHER", "record_kind": "OFFICIAL_ALERT" },
+    { "hazard_family": "WILDFIRE", "record_kind": "SOURCE_OBSERVATION" }
+  ],
+  "forecast": [
+    { "hazard_family": "TROPICAL_CYCLONE", "record_kind": "FORECAST" }
+  ]
+}
+```
+
+_(abridged display; the complete 14,454-byte response is `fixtures/hazards-nearby.json` and is returned by the mock)_
 
 ## POST /mobile/v1/operations — no token (transport 401)
 

@@ -116,6 +116,26 @@ try {
     expect(session.status === 201 && session.body.expires_at, 'no expiry');
   });
 
+  await step('A4 unified hazards return activated Golden GeoData with preserved authority', async () => {
+    const { status, body } = await json(
+      '/mobile/v1/hazards/nearby?lat=43.0731&lon=-89.4012&radius_km=100',
+      { headers: auth }
+    );
+    expect(status === 200 && body.schema_version === 'hazard-nearby/2.0.0', `status ${status}`);
+    expect(body.reference_data.status === 'ACTIVE', 'Golden GeoData is not active');
+    expect(body.reference_data.firm_map.evaluation === 'EVALUATED', 'FIRM panel was not evaluated');
+    const events = [...body.active, ...body.forecast, ...body.recent_history];
+    for (const family of ['FLOOD', 'SEVERE_WEATHER', 'TROPICAL_CYCLONE', 'WILDFIRE']) {
+      expect(events.some((event) => event.hazard_family === family), `missing ${family}`);
+    }
+    for (const event of events) {
+      expect(event.details.detail_type === event.hazard_family, `${event.hazard_id}: detail mismatch`);
+      expect(event.source.authority_class === event.record_kind, `${event.hazard_id}: authority mismatch`);
+    }
+    const fire = events.find((event) => event.hazard_family === 'WILDFIRE');
+    expect(fire.record_kind === 'SOURCE_OBSERVATION', 'fire hotspot promoted to official alert');
+  });
+
   await step('C6 forced expiry is AUTH_EXPIRED, not a domain outcome', async () => {
     const { status, body } = await submit({ ...auth, 'x-floodcaster-mock-session-state': 'expired' });
     expect(status === 401 && body.error === 'AUTH_EXPIRED', `${status} ${body.error}`);
